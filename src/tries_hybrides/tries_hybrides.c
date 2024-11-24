@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <stdio.h>
+
 /* renvoie la première lettre de la chaine de caractères */
 char prem(char* c) {
     return c[0];
@@ -48,7 +50,10 @@ int EstVide(TrieH* A) {
     }
     return 0;
     */
-    return A == NULL;
+    if (A) {
+        return 0;
+    }
+    return 1;
 }
 
 /* renvoie le caractère de la racine du trie hybride */
@@ -56,7 +61,7 @@ char Rac(TrieH* A) {
     if (A) {
         return A->l;
     }
-    return '#';
+    return ' ';
 }
 
 /* renvoie l'entier de la racine du trie hybride, -1 sinon */
@@ -69,47 +74,54 @@ int Val(TrieH* A) {
 
 /* renvoie une copie du sous-arbre gauche de A */
 TrieH* Inf(TrieH* A) {
-    if (EstVide(A->inf)) {
+    if (A==NULL) {
         return TH_Vide();
     }
+    if (EstVide(A->inf)==1) {
+        return A->inf;
+    }
     return TrieHybride((A->inf)->l, 
-                       Inf((TrieH*)A->inf), 
-                       Eq((TrieH*)A->inf), 
-                       Sup((TrieH*)A->inf), 
-                       ((TrieH*)(A->inf))->v);
-    return TH_Vide();
+                       Inf(A->inf), 
+                       Eq(A->inf), 
+                       Sup(A->inf), 
+                       (A->inf)->v);
 }
 
 /* renvoie une copie du sous-arbre central de A */
 TrieH* Eq(TrieH* A) {
-    if (EstVide(A->eq)) {
+    if (A==NULL) {
         return TH_Vide();
     }
+    if (EstVide(A->eq)==1) {
+        return A->eq;
+    }
     return TrieHybride((A->eq)->l, 
-                       Inf((TrieH*)A->eq), 
-                       Eq((TrieH*)A->eq), 
-                       Sup((TrieH*)A->eq), 
-                       ((TrieH*)(A->eq))->v);
-    return TH_Vide();
-}
+                       Inf(A->eq), 
+                       Eq(A->eq), 
+                       Sup(A->eq), 
+                       (A->eq)->v);
+    }
 
 /* renvoie une copie du sous-arbre droite de A */
 TrieH* Sup(TrieH* A) {
-    if (EstVide(A->sup)) {
+    if (A==NULL) {
         return TH_Vide();
+    }
+    if (EstVide(A->sup)==1) {
+        return A->sup;
     }
     return TrieHybride((A->sup)->l, 
                        Inf(A->sup), 
                        Eq(A->sup), 
                        Sup(A->sup), 
                        (A->sup)->v);
-    return TH_Vide();
+    
 }
 
 
 /* renvoie le trie hybride resultant de l'insertion de c dans A */
 TrieH* TH_Ajout(char* c, TrieH* A, int v) {
-    if (EstVide(A)) {
+    if (EstVide(A)==1) {
         if (strlen(c) == 1) {
             return TrieHybride(prem(c), TH_Vide(), TH_Vide(), TH_Vide(), v);
         } else {
@@ -118,20 +130,26 @@ TrieH* TH_Ajout(char* c, TrieH* A, int v) {
     } else {
         char pm = prem(c);
         char rac = Rac(A);
-        /*
-        char* p = &pm;
-        char* r = &rac;
-        int cmp = strcmp(p, r);
-        */
-        //if (cmp < 0) {
-        if (pm < rac) {
-            return TrieHybride(Rac(A), TH_Ajout(c, Inf(A), v), Eq(A), Sup(A), Val(A));
-        } //else if (cmp > 0) {
-        else if (pm > rac) {
-            return TrieHybride(Rac(A), Inf(A), Eq(A), TH_Ajout(reste(c), Sup(A), v), Val(A));
+
+        // ajouté par rapport à l'algo donnée slide 45 du chap 2
+        if (strlen(c) == 1) {
+            if (rac == pm) {
+                int val = Val(A);
+                if (val >= 0) { // si le mot est un doublon
+                    return A;
+                }
+                else {          // sinon, c'est la racine d'un mot déjà inséré
+                    return TrieHybride(rac, Sup(A), Eq(A), Inf(A), val);
+                }
+            }
         }
-        return TrieHybride(Rac(A), Inf(A), TH_Ajout(reste(c), Eq(A), v), Sup(A), Val(A));
+        
+        if (pm < rac) {
+            return TrieHybride(rac, TH_Ajout(c, Inf(A), v), Eq(A), Sup(A), Val(A));
+        }
+        else if (pm > rac) {
+            return TrieHybride(rac, Inf(A), Eq(A), TH_Ajout(c, Sup(A), v), Val(A));
+        }
+        return TrieHybride(rac, Inf(A), TH_Ajout(reste(c), Eq(A), v), Sup(A), Val(A));
     }
 }
-
-//TrieH* ExempleAppel(TrieH* A) { return Sup((TrieH*)A->sup); }
