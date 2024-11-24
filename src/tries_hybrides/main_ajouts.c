@@ -27,7 +27,7 @@ int main() {
         // 36 : la (*2 : 10)
         // 38 : a (*2 : 29)
         
-        if (cpt==9 || cpt==19 || cpt==21 || cpt==29 || cpt==31 || cpt==33 || cpt==35 || cpt==36 || cpt==38) {
+        if (cpt==9 || cpt==33 || cpt==35 || cpt==36 || cpt==38) {
             char* m = mot;
             mot = strtok(NULL, " ,.;?!");
             th = TH_Ajout(m, th, cpt);

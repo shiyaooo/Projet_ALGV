@@ -1,15 +1,6 @@
 #ifndef TRIES_HYBRIDES_H
 #define TRIES_HYBRIDES_H
 
-/*
-struct Node {
-    char l;
-    int i;
-    Node inf;
-    Node eq;
-    Node sup;
-} Node;
-*/
 typedef struct TrieH {
     char l; // lettre
     int v;  // valeur
@@ -43,6 +34,13 @@ TrieH* Eq(TrieH* A);
 /* renvoie une copie du sous-arbre droite de A */
 TrieH* Sup(TrieH* A);
 
+
+/* renvoie la première lettre de la chaine de caractères */
+char prem(char* c);
+
+/* renvoie le reste de la chaine de caractères 
+    privée de la première lettre */
+char* reste(char* c);
 
 /* renvoie le trie hybride resultant de l'insertion de c dans A */
 TrieH* TH_Ajout(char* c, TrieH* A, int v);
