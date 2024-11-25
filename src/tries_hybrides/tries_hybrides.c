@@ -139,7 +139,7 @@ TrieH* TH_Ajout(char* c, TrieH* A, int v) {
                     return A;
                 }
                 else {          // sinon, c'est la racine d'un mot déjà inséré
-                    return TrieHybride(rac, Sup(A), Eq(A), Inf(A), val);
+                    return TrieHybride(rac, Sup(A), Eq(A), Inf(A), v);
                 }
             }
         }

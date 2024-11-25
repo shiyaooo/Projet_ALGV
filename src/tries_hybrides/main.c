@@ -44,12 +44,21 @@ int main() {
     /* Tests fonctions avancées Question 2.6 */
     
     /* tests de Recherche */
-    int recherche = Recherche(th, "de");
-    if (recherche==0) {
-        printf("\"de\" n'est pas présent dans le dictionnaire\n");
-    }
-    else {
-        printf("\"de\" est présent dans le dictionnaire\n");
+    char exemple2[] =
+    "A quel genial professeur de dactylographie sommes nous redevables de la superbe phrase ci dessous, un modele du genre, que toute dactylo connait par coeur puisque elle fait appel a chacune des touches du clavier de la machine a ecrire ?";
+
+    mot = strtok(exemple2, " ,.;?!");
+    int recherche;
+    while (mot!=NULL) {
+        recherche = Recherche(th, mot);
+        if (recherche==0) {
+            printf("\"%s\" n'est pas présent dans le dictionnaire\n", mot);
+        }
+        else {
+            printf("\"%s\" est présent dans le dictionnaire\n", mot);
+        }
+
+        mot = strtok(NULL, " ,.;?!");
     }
 
     recherche = Recherche(th, "toto");

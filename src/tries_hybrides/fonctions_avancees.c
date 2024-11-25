@@ -7,7 +7,7 @@
  */
 int Recherche(TrieH* arbre, char* mot) {
     if (EstVide(arbre)==1) {
-        if (strlen(mot) == 1 && mot[0]==prem(mot) && Val(arbre)>=0) {
+        if (strlen(mot) == 1 && mot[0]==Rac(arbre) && Val(arbre)>=0) {
             return 1;
         } else {
             return 0;
@@ -21,8 +21,9 @@ int Recherche(TrieH* arbre, char* mot) {
                 if (Val(arbre)!=-1) {
                     return 1;
                 }
+                return 0;
             }
-            return 0;
+            //return 0;
         }
         
         if (pm < rac) {
