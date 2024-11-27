@@ -12,10 +12,15 @@ int Recherche(TrieH* arbre, char* mot);
 /* compte les mots présents dans le dictionnaire */
 int ComptageMots(TrieH* arbre);
 
+typedef struct List {
+    char* mot;
+    struct List *suiv;
+} List;
+
 /* liste les mots du dictionnaire dans l'ordre alphabétique 
  * renvoie une liste de mots
  */
-char** ListeMots(TrieH* arbre);
+List* ListeMots(TrieH* arbre);
 
 /* compte les pointeurs vers Nil */
 int ComptageNil(TrieH* arbre);

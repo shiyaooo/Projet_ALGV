@@ -53,11 +53,11 @@ int main() {
         recherche = Recherche(th, mot);
         if (recherche==0) {
             printf("\"%s\" n'est pas présent dans le dictionnaire\n", mot);
-        }
+        } /*
         else {
             printf("\"%s\" est présent dans le dictionnaire\n", mot);
         }
-
+        */
         mot = strtok(NULL, " ,.;?!");
     }
 
@@ -76,7 +76,7 @@ int main() {
     else {
         printf("\"pro\" est présent dans le dictionnaire\n");
     }
-
+    
     /* tests de ComptageMots */
     int comptagemots = ComptageMots(th);
     printf("Il y a %d mots dans la phrase de l'exemple de base\n", comptagemots);
@@ -87,6 +87,16 @@ int main() {
     else {
         printf("erreur de comptage : %d !!!\n", cpt);
     }
-
+    
+    /* test de ListeMots */
+    List* liste = ListeMots(th);
+    int i = 1;
+    List* tmp = liste;
+    while (tmp!=NULL) {
+        printf("%d : %s\n", i, tmp->mot);
+        tmp = tmp->suiv;
+        i++;
+    }
+    
     return 0;
 }
