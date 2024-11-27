@@ -14,6 +14,7 @@ int ComptageMots(TrieH* arbre);
 
 typedef struct List {
     char* mot;
+    int entier;
     struct List *suiv;
 } List;
 

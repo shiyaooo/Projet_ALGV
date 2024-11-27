@@ -2,6 +2,8 @@
 #include "tries_hybrides.h"
 #include <stdlib.h>
 #include <string.h>
+#include <sys/param.h>
+#include <math.h>
 
 #include <stdio.h>
 
@@ -136,13 +138,95 @@ List* ListeMots(TrieH* arbre) {
 }
 
 /* compte les pointeurs vers Nil */
-int ComptageNil(TrieH* arbre);
+int ComptageNil(TrieH* arbre) {
+    if (EstVide(arbre)==1) {
+        return 1;
+    }
+    return ComptageNil(Inf(arbre)) + ComptageNil(Eq(arbre)) + ComptageNil(Sup(arbre));
+}
 
 /* calcule la hauteur de l'arbre */
-int Hauteur(TrieH* arbre);
+int Hauteur(TrieH* arbre) {
+    if (EstVide(arbre)==1) {
+        return -1;
+    }
+    int cpt = MAX(Hauteur(Inf(arbre)), Hauteur(Eq(arbre)));
+    return 1 + MAX(cpt, Hauteur(Sup(arbre)));
+}
+
+List* ProfondeurMoyenneRec(TrieH* arbre, int profondeur) {
+    if (EstVide(arbre)==1) {
+        return NULL;
+    }
+    //printf("%c\n", Rac(arbre));
+    List* list = NULL;
+    if (EstVide(Inf(arbre)) && EstVide(Eq(arbre)) && EstVide(Sup(arbre))) {
+        list = (List*)malloc(sizeof(List));
+        list->entier = profondeur;
+        return list;
+    }
+    
+    int i = profondeur+1;
+    //printf("inf ");
+    List* linf = ProfondeurMoyenneRec(Inf(arbre), i);
+    //printf("eq  ");
+    List* leq = ProfondeurMoyenneRec(Eq(arbre), i);
+    //printf("sup ");
+    List* lsup = ProfondeurMoyenneRec(Sup(arbre), i);
+
+    List* tmp;
+    if (linf!=NULL) {
+        list = linf;
+        tmp = linf;
+        while (tmp->suiv!=NULL) {
+            tmp = tmp->suiv;
+        }
+    }
+
+    if (leq!=NULL) {
+        if (list==NULL) {
+            list = leq;
+            tmp = list;
+        } else {
+            tmp->suiv = leq;
+        }
+        while (tmp->suiv!=NULL) {
+            tmp = tmp->suiv;
+        }
+    }
+
+    if (lsup!=NULL) {
+        if (list==NULL) {
+            list = lsup;
+            tmp = list;
+        } else {
+            tmp->suiv = lsup;
+        }
+    }
+
+    return list;
+}
 
 /* calcule la profondeur moyenne des feuilles de l'arbre */
-int ProfondeurMoyenne(TrieH* arbre);
+int ProfondeurMoyenne(TrieH* arbre) {
+    if (EstVide(arbre)==1) {
+        return 0;
+    }
+    List* lprofondeur = ProfondeurMoyenneRec(arbre, 0);
+    int cpt = 0;
+    int nb = 0;
+    List* tmp = lprofondeur;
+    if (tmp==NULL) {
+        return 0;
+    }
+    while (tmp!=NULL) {
+        cpt += tmp->entier;
+        nb++;
+        tmp = tmp->suiv;
+    }
+    float moyenne = cpt/nb;
+    return (int) round(moyenne);
+}
 
 /* prend un mot A en arguments
  * et qui indique combien de mots du dictionnaire

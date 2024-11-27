@@ -97,6 +97,26 @@ int main() {
         tmp = tmp->suiv;
         i++;
     }
-    
+
+    /* test de ComptageNil */
+    int cptnil = ComptageNil(th);
+    printf("Il y a %d Nil\n", cptnil);
+    /*
+    if (cptnil==299) {
+        printf("Le compte est bon !\n");
+    }
+    else {
+        printf("erreur de comptage : %d !!!\n", cpt);
+    }
+    */
+
+    /* Test de Hauteur */
+    int hauteur = Hauteur(th);
+    printf("La hauteur de l'arbre est de %d\n", hauteur);
+
+    /* Test de ProfondeurMoyenne */
+    int profondmoy = ProfondeurMoyenne(th);
+    printf("La profondeur moyenne des feuilles de est de : %d\n", profondmoy);
+
     return 0;
 }
