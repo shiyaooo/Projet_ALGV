@@ -134,17 +134,25 @@ int main() {
 
     /* Tests de Suppression */
     TrieH* nouv = Suppression(th, "dactylo");
-    //nouv = Suppression(nouv, "prof");
-    //nouv = Suppression(nouv, "dessous");
-    //nouv = Suppression(th, "A");
+    nouv = Suppression(nouv, "prof");
+    nouv = Suppression(nouv, "dessous");
+    nouv = Suppression(th, "A");
+    nouv = Suppression(nouv, "de");
     liste = ListeMots(nouv);
-    printf("\nDictionnaire après suppression de \"dactylo\", \"prof\", \"dessous\", \"A\" :\n");
+    printf("\nDictionnaire après suppression de \"dactylo\", \"prof\", \"dessous\", \"A\", \"de\" :\n");
     i = 1;
     tmp = liste;
     while (tmp!=NULL) {
         printf("%d : %s\n", i, tmp->mot);
         tmp = tmp->suiv;
         i++;
+    }
+    comptagemots = ComptageMots(nouv);
+    if (comptagemots==cpt-4) {
+        printf("Le compte est bon !\n");
+    }
+    else {
+        printf("erreur de comptage : %d !!!\n", cpt);
     }
 
     hauteur = Hauteur(nouv);

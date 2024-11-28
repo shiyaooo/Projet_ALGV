@@ -290,7 +290,7 @@ TrieH* Suppression(TrieH* arbre, char* mot) {
             TrieH* sup = Sup(arbre);
             if (EstVide(sup)==0) {
                 if (nouv==NULL) {
-                    //free(arbre);
+                    free(arbre);
                     return sup;
                 }
                 //char c = Rac(sup);
@@ -304,8 +304,7 @@ TrieH* Suppression(TrieH* arbre, char* mot) {
                     tmp = tmpsup;
                 }
             }
-            //free(arbre);
-            //arbre->eq = nouv;
+            free(arbre);
             return nouv;
         }
         return arbre;   // Sinon, le mot n'est pas présent
@@ -317,7 +316,7 @@ TrieH* Suppression(TrieH* arbre, char* mot) {
     else if (pm > rac) {
         arbre->sup = Suppression(Sup(arbre), mot);
     } else {
-        return Suppression(Eq(arbre), reste(mot));
+        arbre->eq = Suppression(Eq(arbre), reste(mot));
     }
     return arbre;
 }
