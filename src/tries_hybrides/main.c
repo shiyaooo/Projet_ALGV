@@ -116,7 +116,42 @@ int main() {
 
     /* Test de ProfondeurMoyenne */
     int profondmoy = ProfondeurMoyenne(th);
-    printf("La profondeur moyenne des feuilles de est de : %d\n", profondmoy);
+    printf("La profondeur moyenne des feuilles est de : %d\n", profondmoy);
+
+    /* Tests de Prefixe */
+    int prefixe = Prefixe(th, "dactylo");
+    printf("Le mot \"dactylo\" est prefixe de %d mot(s)\n", prefixe);
+    prefixe = Prefixe(th, "quel");
+    printf("Le mot \"quel\" est prefixe de %d mot(s)\n", prefixe);
+    prefixe = Prefixe(th, "que");
+    printf("Le mot \"que\" est prefixe de %d mot(s)\n", prefixe);
+    prefixe = Prefixe(th, "de");
+    printf("Le mot \"de\" est prefixe de %d mot(s)\n", prefixe);
+    prefixe = Prefixe(th, "a");
+    printf("Le mot \"a\" est prefixe de %d mot(s)\n", prefixe);
+    prefixe = Prefixe(th, "toto");
+    printf("Le mot \"toto\" est prefixe de %d mot(s)\n", prefixe);
+
+    /* Tests de Suppression */
+    TrieH* nouv = Suppression(th, "dactylo");
+    //nouv = Suppression(nouv, "prof");
+    //nouv = Suppression(nouv, "dessous");
+    //nouv = Suppression(th, "A");
+    liste = ListeMots(nouv);
+    printf("\nDictionnaire après suppression de \"dactylo\", \"prof\", \"dessous\", \"A\" :\n");
+    i = 1;
+    tmp = liste;
+    while (tmp!=NULL) {
+        printf("%d : %s\n", i, tmp->mot);
+        tmp = tmp->suiv;
+        i++;
+    }
+
+    hauteur = Hauteur(nouv);
+    printf("La hauteur de l'arbre est de %d\n", hauteur);
+
+    profondmoy = ProfondeurMoyenne(nouv);
+    printf("La profondeur moyenne des feuilles est de : %d\n", profondmoy);
 
     return 0;
 }

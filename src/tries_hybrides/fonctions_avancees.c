@@ -13,11 +13,14 @@
  */
 int Recherche(TrieH* arbre, char* mot) {
     if (EstVide(arbre)==1) {
+        /*
         if (strlen(mot) == 1 && mot[0]==Rac(arbre) && Val(arbre)>=0) {
             return 1;
         } else {
             return 0;
         }
+        */
+        return 0;
     } else {
         char pm = prem(mot);
         char rac = Rac(arbre);
@@ -232,9 +235,89 @@ int ProfondeurMoyenne(TrieH* arbre) {
  * et qui indique combien de mots du dictionnaire
  * le mot A est préfixe
  */
-int Prefixe(TrieH* arbre, char* mot);
+int Prefixe(TrieH* arbre, char* mot) {
+    if (EstVide(arbre)==1) {
+        return 0;
+    }
+    int prefixe = 0;
+    if (strcmp(mot, "")==0) {
+        if (Val(arbre)!=-1) {
+            prefixe = 1;
+        }
+    } else {
+        char pm = prem(mot);
+        char rac = Rac(arbre);
+        if (strlen(mot) == 1) {
+            if (rac == pm) {
+                if (Val(arbre)!=-1) {
+                    prefixe = 1;
+                }
+                //return 0;
+            }
+        }
+        if (pm < rac) {
+            return prefixe + Prefixe(Inf(arbre), mot);
+        }
+        else if (pm > rac) {
+            return prefixe + Prefixe(Sup(arbre), mot);
+        }
+        return prefixe + Prefixe(Eq(arbre), reste(mot));
+    }
+    return prefixe + Prefixe(Inf(arbre), mot) + Prefixe(Sup(arbre), mot) + Prefixe(Eq(arbre), mot);
+}
 
 /* prend un mot en argument
  * et qui le supprime de l'arbre s'il y figure
  */
-TrieH* Suppression(TrieH* arbre, char* mot);
+TrieH* Suppression(TrieH* arbre, char* mot) {
+    if (EstVide(arbre)==1) {
+        return arbre;
+    }
+    char pm = prem(mot);
+    char rac = Rac(arbre);
+    
+    if (strlen(mot) == 1) {
+        if (rac == pm && Val(arbre)!=-1) {
+            arbre->v = -1;
+            if (EstVide(Eq(arbre))==0) {    // si le mot était un préfixe
+                return arbre;
+            }
+            //free(arbre->l);
+            TrieH* nouv = NULL;
+            if (EstVide(Inf(arbre))==0) {
+                nouv = Inf(arbre);
+            }
+            TrieH* sup = Sup(arbre);
+            if (EstVide(sup)==0) {
+                if (nouv==NULL) {
+                    //free(arbre);
+                    return sup;
+                }
+                //char c = Rac(sup);
+                TrieH* tmp = nouv;
+                while (tmp!=NULL) {
+                    TrieH* tmpsup = Sup(tmp);
+                    if (EstVide(tmpsup)==1) {
+                        tmp->sup = sup;
+                        break;
+                    }
+                    tmp = tmpsup;
+                }
+            }
+            //free(arbre);
+            //arbre->eq = nouv;
+            return nouv;
+        }
+        return arbre;   // Sinon, le mot n'est pas présent
+    }
+    
+    if (pm < rac) {
+        arbre->inf = Suppression(Inf(arbre), mot);
+    }
+    else if (pm > rac) {
+        arbre->sup = Suppression(Sup(arbre), mot);
+    } else {
+        return Suppression(Eq(arbre), reste(mot));
+    }
+    return arbre;
+}
