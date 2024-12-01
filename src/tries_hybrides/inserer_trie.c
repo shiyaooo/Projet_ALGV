@@ -32,9 +32,9 @@ int ecrire_trie(FILE* file, TrieH* arbre, int tabulation) {
         fputc('\t', file);
     }
     if (Val(arbre)==-1) {
-        fputs("\"is_end_of_world\": false,\n", file);
+        fputs("\"is_end_of_word\": false,\n", file);
     } else {
-        fputs("\"is_end_of_world\": true,\n", file);
+        fputs("\"is_end_of_word\": true,\n", file);
     }
 
     for(int i=0;i<nouvtab;i++) {
@@ -93,8 +93,12 @@ int main(int argc, char *argv[]) {
     
     // Ecrire un fichier .json
     file = fopen("trie.json", "w");
-    //fprintf(file, "{\n");
 
+    if (file == NULL) {
+        printf("Erreur lors de l'ouverture du fichier .json\n");
+        return 1;
+    }
+    //fprintf(file, "{\n");
     ecrire_trie(file, th, 0);
 
     fclose(file);
