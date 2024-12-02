@@ -1,10 +1,10 @@
 #include "tries_hybrides.h"
 #include "fonctions_avancees.h"
-//#include "ecriture_lecture.h"
+#include "ecriture_lecture.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+/*
 int ecrire_trie(FILE* file, TrieH* arbre, int tabulation) {
     if (file == NULL) {
         printf("Erreur lors de l'ouverture du fichier .json\n");
@@ -67,7 +67,7 @@ int ecrire_trie(FILE* file, TrieH* arbre, int tabulation) {
 
     return 0;
 }
-
+*/
 int main(int argc, char *argv[]) {
     if (argc!=2) {
         printf("Usage: %s <fichier.txt>\n", argv[0]);
