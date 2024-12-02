@@ -84,7 +84,8 @@ TrieH* charger_trie(char *content, int *index) {
         if (content[*index] == '\"') {
             (*index)++;
             if (strncmp(&content[*index], "char", 4) == 0) {
-                *index += 6;
+                *index += 8;
+                //printf("%c\n",content[*index]);
                 th->l = content[*index];
                 *index += 2;
             } else if (strncmp(&content[*index], "is_end_of_word", 14) == 0) {
@@ -100,7 +101,7 @@ TrieH* charger_trie(char *content, int *index) {
             } else if (strncmp(&content[*index], "left", 4) == 0) {
                 *index+=6;
                 if (strncmp(&content[*index], "null", 4) == 0) {
-                    *index+=5;
+                    *index+=4;
                     th->inf = TH_Vide();
                 } else {
                     //*index+=1;
@@ -109,7 +110,7 @@ TrieH* charger_trie(char *content, int *index) {
             } else if (strncmp(&content[*index], "middle", 6) == 0) {
                 *index+=8;
                  if (strncmp(&content[*index], "null", 4) == 0) {
-                    *index+=5;
+                    *index+=4;
                     th->eq = TH_Vide();
                 } else {
                     //*index+=1;
@@ -125,9 +126,9 @@ TrieH* charger_trie(char *content, int *index) {
                     th->sup = charger_trie(content, index);
                 }
             }
-        } /*else {
-            *index+=1;
-        }*/
+        } else {
+            (*index)++;
+        }
     }
     return th;
 }

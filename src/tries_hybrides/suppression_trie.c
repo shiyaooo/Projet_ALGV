@@ -86,9 +86,9 @@ int main(int argc, char *argv[]) {
     content[length] = '\0';
 
     setCpt(0);
-    int *index = 0;
-    TrieH* th = charger_trie(content, index);
-
+    int index = 0;
+    TrieH* th = charger_trie(content, &index);
+    /*
     // lecture du fichier .txt
     // et suppressions successives des mots dans le trie hybride
     file = fopen(argv[1], "r");
@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
         printf("Erreur lors de l'ouverture du fichier .txt\n");
         return 1;
     }
-
+    
     char line[256];
     while (fgets(line, sizeof(line), file)) {
         //printf("%s", line);
@@ -104,7 +104,7 @@ int main(int argc, char *argv[]) {
         th = Suppression(th, line);
     }
     fclose(file);
-
+    */
     // Ecrire un fichier .json
     file = fopen("trie.json", "w");
 
