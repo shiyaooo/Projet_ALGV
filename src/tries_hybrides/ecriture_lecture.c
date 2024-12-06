@@ -87,9 +87,9 @@ TrieH* charger_trie(char *content, int *index) {
                 *index += 8;
                 //printf("%c\n",content[*index]);
                 th->l = content[*index];
-                *index += 2;
+                *index += 3;
             } else if (strncmp(&content[*index], "is_end_of_word", 14) == 0) {
-                *index += 16;
+                *index += 17;
                 if (strncmp(&content[*index], "false", 5) == 0) {
                     th->v = -1;
                     *index += 6;
@@ -99,25 +99,25 @@ TrieH* charger_trie(char *content, int *index) {
                     *index += 5;    // true
                 }
             } else if (strncmp(&content[*index], "left", 4) == 0) {
-                *index+=6;
+                *index+=7;
                 if (strncmp(&content[*index], "null", 4) == 0) {
-                    *index+=4;
+                    *index+=5;
                     th->inf = TH_Vide();
                 } else {
                     //*index+=1;
                     th->inf = charger_trie(content, index);
                 }
             } else if (strncmp(&content[*index], "middle", 6) == 0) {
-                *index+=8;
+                *index+=9;
                  if (strncmp(&content[*index], "null", 4) == 0) {
-                    *index+=4;
+                    *index+=5;
                     th->eq = TH_Vide();
                 } else {
                     //*index+=1;
                     th->eq = charger_trie(content, index);
                 }
-            } else if (strncmp(&content[*index], "right", 6) == 0) {
-                *index+=7;
+            } else if (strncmp(&content[*index], "right", 5) == 0) {
+                *index+=8;
                  if (strncmp(&content[*index], "null", 4) == 0) {
                     *index+=4;
                     th->sup = TH_Vide();
@@ -126,6 +126,9 @@ TrieH* charger_trie(char *content, int *index) {
                     th->sup = charger_trie(content, index);
                 }
             }
+        } else if (strncmp(&content[*index], "}", 1) == 0) {
+            *index+=1;
+            return th;
         } else {
             (*index)++;
         }
