@@ -123,14 +123,13 @@ int main() {
     
     printPAT(pat);
     
-
-
     
 
     // liberer les memoire 
     //libererNode(n);
     libererPAT(p);
     libererPAT(pp);
+    libererPAT(pat);
 
     return 0;
 }
