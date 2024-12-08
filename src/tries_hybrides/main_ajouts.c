@@ -12,6 +12,7 @@ int main() {
     char *mot;
 
     mot = strtok(exemple, " ,.;?!");
+    printf("%s\n",mot);
 
     int cpt = 0;
     while (mot!=NULL) {
