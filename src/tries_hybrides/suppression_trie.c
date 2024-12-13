@@ -100,9 +100,8 @@ int main(int argc, char *argv[]) {
     
     char line[256];
     while (fgets(line, sizeof(line), file)) {
-        //printf("%s", line);
+        //printf("%ld\n", strlen(line));
         line[strcspn(line, "\n")] = '\0';
-        printf(" : %s\n", line);
         th = Suppression(th, line);
     }
     fclose(file);
