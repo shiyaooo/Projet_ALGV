@@ -1,47 +1,45 @@
-#ifndef PATRICIA_TRIES_H
-#define PATRICIA_TRIES_H
+#ifndef FONCT_AVC_H
+#define FONCT_AVC_H
+#include <stdbool.h>
+#include "Patricia_Tries.h"
 
-#define END_OF_WORD "\x20"    // terminateur de mot d'un arbre de dictionnaire (patricia_trie)
-#define MAX_SIZE 1000
+typedef struct{
+    char* cle;
+    int val;
+    PAT* enf;
+} Dic_enf;
+
+/*EX2*/
+bool recherchePAT(PAT* A, char* mot);
+
+int ComptageMotsdansPAT(PAT* A);
+
+int comparemots(const void* a, const void* b);
+void collecterMots(Node* racine, char* prefixe, char*** resultats, int* taille, int* capacite);
+char** ListeMotsdansPAT(PAT* A);
+
+int ComptageNildansNode(Node* n);
+int ComptageNildansPAT(PAT* A);
+
+int HauteurNode(Node* n);
+int HauteurPAT(PAT* A);
+
+void calculerProfondeursFeuilles(Node* A, int profondeur, int* somme, int* nb_feuilles);
+int ProfondeurMoyennePAT(PAT* A);
+
+void compterMotsDansSousArbre(Node* A, int* count);
+void compterMotsPrefixe(Node* A, char* mot, int* count);
+int PrefixedansPAT(PAT* A, char* mot);
+
+char* concat(const char* a, const char* b);
+Dic_enf* consDic_enf(char* cle, int val);
+void libererDic_enf(Dic_enf* de);
+void PATsuppressionRec(PAT** A, char* mot);
+void PATsuppression(PAT** A, char* mot);
 
 
-typedef struct PAT PAT;
-
-typedef struct _Node{
-    char* cle; // le plus long prefixe commun
-    int valeur; //nb de cle;
-    //struct _Node **fils; // Liste dynamique des sous-fils
-    PAT* fils;
-    //bool est_fin;  // Indicateur si c'est la fin d'un mot
-} Node;
-
-typedef struct PAT{
-    //Node** racine;
-    Node** node;
-} PAT;
-
-//typedef struct Patricia_Tries PAT;
-
-Node* Nodevide();
-PAT* PATVide();
-Node* NodeCons(char* m);
-PAT* creer_PAT();
-PAT* PATCons(Node* n);
-int EstVideNode(Node* A);
-int EstVide(PAT* A);
-char* Rac(Node* A);
-int Val(Node* A);
-void printNode(Node* A, int indentation);
-void printPAT(PAT* P);
-void libererNode(Node* A);
-void libererPAT(PAT* A);
-void ajouter_fils(Node* A, Node* fil );
-void ajouter_racine(PAT** P, Node* r);
-void PATinsertion(PAT** A, char* m) ;
-int estPrefixe (char*c , char* m);
-int prefixe(char* c, char* m);
-void splitSentence(char *sentence) ;
+PAT* PATfusion(PAT* A, PAT* B);
 
 
 
-#endif
+#endif 
