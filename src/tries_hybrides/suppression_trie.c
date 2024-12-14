@@ -97,11 +97,18 @@ int main(int argc, char *argv[]) {
         printf("Erreur lors de l'ouverture du fichier .txt\n");
         return 1;
     }
-    
+    /*
+    char* dactylo = "dactylo";
+    printf("%ld\n", strlen(dactylo));
+    */
     char line[256];
     while (fgets(line, sizeof(line), file)) {
+        //size_t len = strlen(line);
+        //printf("Avant suppression du \\n, longueur: %zu, ligne: '%s'\n", len, line);
         //printf("%ld\n", strlen(line));
         line[strcspn(line, "\n")] = '\0';
+        //len = strlen(line);
+        //printf("Après suppression du \\n, longueur: %zu, ligne '%s'\n", len, line);
         th = Suppression(th, line);
     }
     fclose(file);
