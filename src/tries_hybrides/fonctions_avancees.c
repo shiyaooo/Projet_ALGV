@@ -311,11 +311,75 @@ TrieH* Suppression(TrieH* arbre, char* mot) {
     }
     
     if (pm < rac) {
-        arbre->inf = Suppression(Inf(arbre), mot);
+        TrieH* inf = Inf(arbre);
+        if (EstVide(inf)==1) {  // Si vide, alors vide
+            arbre->inf = inf;
+        } else {                // Sinon, suppression
+            arbre->inf = Suppression(inf, mot);
+        }
+        //arbre->inf = Suppression(Inf(arbre), mot);
     } else if (pm > rac) {
-        arbre->sup = Suppression(Sup(arbre), mot);
+        TrieH* sup = Sup(arbre);
+        if (EstVide(sup)==1) {  // Si vide,   //   //
+            arbre->sup = sup;
+        } else {                // Sinon,       //
+            arbre->sup = Suppression(sup, mot);
+        }
+        //arbre->sup = Suppression(Sup(arbre), mot);
     } else {
-        arbre->eq = Suppression(Eq(arbre), reste(mot));
+        TrieH* eq = Eq(arbre);
+        if (EstVide(eq)==1) {   // Si vide,   //   //
+            arbre->eq = eq;
+        } else {                // Sinon,
+            eq = Suppression(eq, reste(mot));  // suppression
+            if (EstVide(eq)==1) {       // Si vide (après suppression),
+
+                if (Val(arbre)!=-1) {       // Si Rac(arbre) est la fin d'un mot
+                    if (EstVide(Inf(arbre))==0) {
+                        TrieH* inf = Inf(arbre);
+                        arbre->eq = inf;
+                        arbre->inf = TH_Vide();
+                    } 
+                    else if (EstVide(Sup(arbre))==0) {
+                        TrieH* sup = Sup(arbre);
+                        arbre->eq = sup;
+                        arbre->sup = TH_Vide();
+                    }
+                    else {
+                        arbre->eq = eq;
+                    }
+                    return arbre;
+                }
+
+                TrieH* nouv = NULL;
+                if (EstVide(Inf(arbre))==0) {   // Si inf non vide
+                    nouv = Inf(arbre);
+                }
+                TrieH* sup = Sup(arbre);
+                if (EstVide(sup)==0) {          // Si sup non vide
+                    if (nouv==NULL) {
+                        free(arbre);
+                        return sup;
+                    }
+                    //char c = Rac(sup);
+                    TrieH* tmp = nouv;
+                    while (tmp!=NULL) {
+                        TrieH* tmpsup = Sup(tmp);
+                        if (EstVide(tmpsup)==1) {
+                            tmp->sup = sup;
+                            break;
+                        }
+                        tmp = tmpsup;
+                    }
+                }
+                free(arbre);
+                return nouv;
+
+            } else {
+                arbre->eq = eq;
+            }
+        }
+        //arbre->eq = Suppression(Eq(arbre), reste(mot));
     }
     return arbre;
 }

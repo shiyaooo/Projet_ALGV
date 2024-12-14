@@ -5,7 +5,7 @@ all: trie
 
 # Tries hybrides
 
-trie: main_trie inserer_trie suppression_trie liste_mots_trie
+trie: main_trie inserer_trie suppression_trie liste_mots_trie profondeur_moyenne_trie
 
 tries_hybrides.o: src/tries_hybrides/tries_hybrides.c
 	$(CC) $(CFLAGS) -c src/tries_hybrides/tries_hybrides.c
@@ -28,8 +28,11 @@ suppression_trie: tries_hybrides.o fonctions_avancees.o ecriture_lecture.o
 liste_mots_trie: tries_hybrides.o fonctions_avancees.o ecriture_lecture.o
 	$(CC) $(CFLAGS) -o liste_mots_trie src/tries_hybrides/liste_mots_trie.c tries_hybrides.o fonctions_avancees.o ecriture_lecture.o -lm
 
+profondeur_moyenne_trie: tries_hybrides.o fonctions_avancees.o ecriture_lecture.o
+	$(CC) $(CFLAGS) -o profondeur_moyenne_trie src/tries_hybrides/profondeur_moyenne_trie.c tries_hybrides.o fonctions_avancees.o ecriture_lecture.o -lm
+
 
 clean:
-	rm -f *.o main_trie inserer_trie suppression_trie liste_mots_trie
+	rm -f *.o main_trie inserer_trie suppression_trie liste_mots_trie profondeur_moyenne_trie
 
 .PHONY: all clean
