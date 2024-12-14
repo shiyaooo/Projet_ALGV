@@ -2,7 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Patricia_Tries.h"
+#include "fonct_avc.h"
 #include <ctype.h>  
+#include <stdbool.h>
+#include <unistd.h>
+// gcc -Wall -o main main.c Patricia_Tries.c fonct_avc.c
 
 int main() {
     /*****************************EX1*****************************/
@@ -75,8 +79,8 @@ int main() {
     char* tmp6 = "dactylo";
     char* tmp7 = "des";
     char* tmp8 = "du";
-    char* tmp9 = "de";
-    char* tmp10 = "de";
+    char* tmp9 = "des";
+    char* tmp10 = "AACG";
 
     PAT* pp = NULL;
     PATinsertion(&pp, tmp);
@@ -92,10 +96,11 @@ int main() {
     printf("PAT est:\n");
     printPAT(pp);
 
-    printf("/************************ Q1.3 Ajouts successifs l'arbre représentant la phrase suivante,. ************************/\n\n");
+    printf("/************************ Q1.3 Ajouts successifs l'arbre représentant la phrase suivante. ************************/\n\n");
 
     char exemple[] =
     "A quel genial professeur de dactylographie sommes nous redevables de la superbe phrase ci dessous, un modele du genre, que toute dactylo connait par coeur puisque elle fait appel a chacune des touches du clavier de la machine a ecrire ?";
+    //"La phrase ci-dessus, quelle que soit la situation d'énonciation, signifie qu'il fait beau. Rien de plus, rien de moins. En tant qu'énoncé par contre, elle peut avoir des sens différents. S'il fait vraiment beau, le sens de l'énoncé ci-dessus correspond à la signification de la phrase. Si, au contraire, le temps n'est pas beau, et que l'énonciateur s'exprime ironiquement, le sens de l'énoncé sera : ' Il ne fait vraiment pas beau ! ', tandis que la signification de la phrase restera inchangée : ' Il fait beau. '";
     PAT* pat = PATVide();
     char *mot;
     mot = strtok(exemple, " ");
@@ -123,9 +128,75 @@ int main() {
     
     printPAT(pat);
     
-    
 
-    // liberer les memoire 
+    printf("/************************ Q2.6 Écrire les algorithmes suivants pour PAT. ************************/\n\n");
+    printf("Recher un mot dans PAT:\n");
+    m = "des";
+    bool isExist = recherchePAT(pat,m);
+    printf("le mot '%s' est dans l'arbre ? = %d\n", m, isExist);
+
+    printf("\nLes mots présents dans le dictionnaire: \n");
+    int nb_mot = ComptageMotsdansPAT(pat);
+    printf("il y a %d mots présents dans le dictionnaire (avec les ponctuations).\n",nb_mot);
+
+    printf("\nliste les mots du dictionnaire dans l’ordre alphabétique:\n");
+    char** list_mot =  ListeMotsdansPAT(pat);
+    printf("Mots dans le Patricia Trie :\n");
+    for (int i = 0; list_mot[i] != NULL; i++) {
+        printf("%s\n", list_mot[i]);
+    }
+
+    printf("\nCompte les pointeurs vers Nil: \n");
+    int totalNil = ComptageNildansPAT(pat);
+    printf("Nombre total de pointeurs NULL : %d\n", totalNil);
+
+    printf("\nCalcule la hauteur de l’arbre PAT:\n");
+    int hauteur = HauteurPAT(pat);
+    printf("Hauteur du Patricia Trie : %d\n", hauteur);
+
+    printf("\nCalcule la profondeur moyenne des feuilles de l’arbre PAT:\n");
+    int pronfondeur = ProfondeurMoyennePAT(pat);
+    printf("Profondeur moyenne des feuilles du Patricia Trie : %d\n", pronfondeur);
+
+    
+    printf("\nCompter de mots du dictionnaire le mot A est préfixe.\n");
+    m = "que";
+    int nb_prefixe = PrefixedansPAT(pat, m);
+    printf("Il y a %d de mots du dictionnaire le mot '%s' est préfixe.\n", nb_prefixe, m);
+
+    printf("\nSupprimer un mot dans l'arbre PAT.\n");
+    m = "res";
+    printPAT(pp);
+    PATsuppression(&pp, m);
+    printf("PAT apres supprime le mot '%s' :\n", m);
+    printPAT(pp);
+
+    printf("\nFusionner deux Patricia-tries en un seul.\n");
+    printf("les deux Patricia-tries sont: \n");
+    // Node* t = NodeCons("ABC ");
+    // PAT* pt = PATCons(t); 
+    printPAT(pp);
+    printf(" et :\n");
+    Node* tt = NodeCons("ABC ");
+    PAT* ptt = PATCons(tt);
+    PATinsertion(&ptt, "ABCD");
+    // printPAT(ptt);
+    PATinsertion(&ptt, "A"); 
+    PATinsertion(&ptt, "AC"); 
+    printPAT(ptt);
+    PAT* test = PATfusion(pp, ptt);
+    printf("Le resultat obtenu est :\n");
+    printPAT(test);
+
+   
+
+
+    // Libération de la mémoire
+    for (int i = 0; list_mot[i] != NULL; i++) {
+        free(list_mot[i]);
+    }
+    free(list_mot);
+
     //libererNode(n);
     libererPAT(p);
     libererPAT(pp);

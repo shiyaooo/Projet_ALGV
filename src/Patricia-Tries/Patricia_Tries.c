@@ -117,14 +117,14 @@ void printNode(Node* A, int indentation){
     for(int i =0; i < indentation ; i++){
         printf("  ");  // Indentation pour chaque niveau
     }
-
+    
     printf("(%s, %d)\n", A -> cle, A -> valeur);
 
     // Afficher les enfants du nœud
     // for(int i = 0; A -> fils != NULL && A -> fils[i] != NULL; i++){
     //     printNode(A->fils[i], indentation + 1);
     // }
-    for(int i = 0; A -> fils != NULL && A -> fils->node[i] != NULL; i++){
+    for(int i = 0; A -> fils != NULL && A -> fils->node[i] != NULL /*&& A->fils->node[i]->cle !=NULL*/; i++){
         printNode(A->fils->node[i], indentation + 1);
     }
 }
@@ -140,7 +140,7 @@ void printPAT(PAT* P){
     //     printNode(P -> racine[i], 0);
     // }
 
-    for(size_t i = 0; P->node[i] != NULL; i++){
+    for(size_t i = 0; P->node[i] != NULL /*&& P->node[i]->cle != NULL*/; i++){
         printNode(P -> node[i], 0);
     }
 }
@@ -210,7 +210,6 @@ void ajouter_fils(Node* A, Node* fil ){
         A->fils->node = temp;
         A->fils->node[i] = fil;  // Ajouter le nouvel enfant
         A->fils->node[i+1] = NULL; // Mettre à jour le terminateur
-
     }
 
 }
@@ -273,11 +272,11 @@ void PATinsertion(PAT** A, char* m) {
         Node* c = Nodevide();
         for(int i = 0; (*A)->node[i]!= NULL; i++){
             if((*A)->node[i]->cle[0] == t){
+                // free(c);
                 c = (*A)->node[i];
                 break;
             }
         }
-
         if(c == NULL){
             char* tmp = malloc((strlen(m)+1)*sizeof(char)); //("abc\0")
             strcpy(tmp, m) ;
@@ -287,19 +286,19 @@ void PATinsertion(PAT** A, char* m) {
             ajouter_racine(A, n);
             free(tmp);
         }else{
+            // printf("c->cle %s, m %s\n", c->cle, m);
             if(estPrefixe(c->cle, m) == 1){
-                // printf("ici\n");
+                printf("ici\n");
                 // printf("c, m = %s, %s\n", c->cle, m);
                 int len_c = strlen(c->cle);  // Longueur de la chaîne `c`
                 if(c->cle[len_c -1] == ' ') len_c --;
                 
                 int len_m = strlen(m);  // Longueur de la chaîne `m`
                 if(m[len_m -1] == ' ') len_m --;
-
-                if(len_c == len_m){
+                if(len_c == len_m){                    
                     bool find = false;
-                    printf("egal:");
-                    printf("c, m = %s, %s\n", c->cle, m);
+                    // printf("egal:");
+                    // printf("c, m = %s, %s\n", c->cle, m);
                     if(c->fils == NULL) c->valeur ++;           
                     else{
                         int val = c->valeur;
@@ -321,6 +320,7 @@ void PATinsertion(PAT** A, char* m) {
                                 fprintf(stderr, "Erreur de réallocation de mémoire\n");
                                 exit(1);
                             }
+                            // free(c->fils);
                             c->fils->node = temp;
                             c->fils->node[i] = NodeCons(END_OF_WORD);  // Ajouter le nouvel enfant
                             c->fils->node[i]->valeur = val+1;
@@ -331,30 +331,33 @@ void PATinsertion(PAT** A, char* m) {
                     
                 }else{
                     char* reste_m = m + len_c;
+                    // utilser strndup pour créer une nouvelle cle
+                    if(c->cle[len_c]==' '){
+                        char* old_cle = c->cle;
+                        int old_val = c->valeur;
+                        c->cle = strndup(old_cle, len_c);
+                        c->valeur = 0;        
+                        Node* n = NodeCons(END_OF_WORD);
+                        free(c->fils);
+                        // free(c);
+                        ajouter_fils(c,n);
+                        for(int i = 0; c->fils->node[i]!=NULL; i++){
+                            if(strcmp(c->fils->node[i]->cle, END_OF_WORD) == 0){
+                                c->fils->node[i]->valeur = old_val;
+                                break;
+                            }
+                        }
+                        if (old_cle != NULL) free(old_cle);
+                
+                    }
+                    // printf("reste mot %s\n",reste_m);
                     PATinsertion(&(c->fils), reste_m);
                 }
-
-            // }else if(estPrefixe(m, c->cle) == 1){
-            //     int len_c = strlen(c->cle);  // Longueur de la chaîne `c`
-            //     if(c->cle[len_c -1] == ' ') len_c --;
-                
-            //     int len_m = strlen(m);  // Longueur de la chaîne `m`
-            //     if(m[len_m -1] == ' ') len_m --;
-
-                
-            //     char* reste_c = c -> cle + len_m; 
-            //     Node* new_node = NodeCons(reste_c);
-            //     new_node -> fils = c->fils; // Reprendre les enfants existants
-
-            //     c -> cle = strdup(m); // Mettre à jour la clé du parent 
-            //     //c ->valeur = 1;
-            //     c -> fils = NULL; // Réinitialiser les enfants
-            //     ajouter_fils(c, new_node);
             }else{
                 int len_com = prefixe(c->cle, m);
                 char* reste_c = c->cle + len_com;         // Le reste de `c`        
                 char* reste_m = m + len_com;         // Le reste de `m`
-
+                printf("len_com %d, c rest %s, mot rest %s\n",len_com,reste_c, reste_m);
                 Node* fc = NodeCons(reste_c);
                 fc->fils = c ->fils;
 
@@ -369,13 +372,16 @@ void PATinsertion(PAT** A, char* m) {
                 // Mettre à jour le nœud actuel pour contenir uniquement le préfixe commun 
                 // stocker clé ancienne
                 char* old_cle = c->cle;
-
                 // utilser strndup pour créer une nouvelle cle
                 c->cle = strndup(old_cle, len_com);                         
                 c->valeur = 0;
                 c->fils = NULL; // Réinitialiser les enfants
+                // printf("fc is \n");
+                
                 ajouter_fils(c, fc);
+                
                 ajouter_fils(c, fm);
+                // printNode(fm,0); 
                 free(tmp);
                 // free cle acienne
                 if (old_cle != NULL) {
@@ -385,6 +391,19 @@ void PATinsertion(PAT** A, char* m) {
         }
     }
 }
+
+// void PATinsertion(PAT** A, char* mot){
+//     // printPAT(*A);
+//     for(int i = 0; (*A )->node[i] != NULL; i++){ 
+//         if((*A )->node[i]->cle == NULL){
+//             // libererPAT((*A )->node[i]->fils);
+//             free((*A)->node[i]);
+//             (*A)->node[i]= NULL;
+//             break;
+//         }
+//     }
+//     PATinsertionRec(A, mot);
+// }
 
 // Foction pour verifier c est préfixe de m, si oui -> 1, sinon 0
 int estPrefixe (char*c , char* m){
@@ -471,4 +490,5 @@ void splitSentence(char *sentence) {
         printf("Mot: %s\n", word);
     }
 }
+
 
