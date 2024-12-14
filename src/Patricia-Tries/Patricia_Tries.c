@@ -189,6 +189,7 @@ void libererPAT(PAT* A){
 void ajouter_fils(Node* A, Node* fil ){
     if(EstVideNode(A) ==  1){
         fprintf(stderr, "Erreur: Le parent est NULL. Impossible d'ajouter un enfant\n");
+        return ; 
     }
 
     if(A->fils == NULL){ // Le tableau lui-même ne stocke pas le nombre actuel de nœuds enfants. En ajoutant un pointeur NULL à la fin du tableau, le programme peut facilement savoir où se termine la liste des nœuds enfants, évitant ainsi les accès hors limites.
@@ -196,6 +197,7 @@ void ajouter_fils(Node* A, Node* fil ){
         A->fils->node = (Node**) malloc(2* sizeof(Node*));
         A->fils->node[0] = fil; // Ajouter le premier enfant
         A->fils->node[1] = NULL; // Marquer la fin de la liste
+        return ;
     }else{
         // Si des enfants existent déjà, compter leur nombre
         int i = 0;
@@ -216,11 +218,15 @@ void ajouter_fils(Node* A, Node* fil ){
 
 // Fonction pour ajouter une racine
 void ajouter_racine(PAT** P, Node* r){
+    // printf("r is\n");
+    // printNode(r,0);
     if(!r){
         fprintf(stderr, "Erreur: noeud invalide.\n");
+        return;
     }
     if(*P == NULL){
         *P = PATCons(r);
+        return ;
     }
 
     PAT* trie = *P;
@@ -288,7 +294,7 @@ void PATinsertion(PAT** A, char* m) {
         }else{
             // printf("c->cle %s, m %s\n", c->cle, m);
             if(estPrefixe(c->cle, m) == 1){
-                printf("ici\n");
+                // printf("ici\n");
                 // printf("c, m = %s, %s\n", c->cle, m);
                 int len_c = strlen(c->cle);  // Longueur de la chaîne `c`
                 if(c->cle[len_c -1] == ' ') len_c --;
@@ -335,6 +341,7 @@ void PATinsertion(PAT** A, char* m) {
                     if(c->cle[len_c]==' '){
                         char* old_cle = c->cle;
                         int old_val = c->valeur;
+                        // printf("old val %d\n",old_val);
                         c->cle = strndup(old_cle, len_c);
                         c->valeur = 0;        
                         Node* n = NodeCons(END_OF_WORD);
@@ -357,9 +364,15 @@ void PATinsertion(PAT** A, char* m) {
                 int len_com = prefixe(c->cle, m);
                 char* reste_c = c->cle + len_com;         // Le reste de `c`        
                 char* reste_m = m + len_com;         // Le reste de `m`
-                printf("len_com %d, c rest %s, mot rest %s\n",len_com,reste_c, reste_m);
+                // printf("len_com %d, c rest %s, mot rest %s\n",len_com,reste_c, reste_m);
                 Node* fc = NodeCons(reste_c);
+                int val_old = c->valeur;
+                // printf("fc avant ajouter c fils\n");
+                // printNode(fc,0);
+                fc->valeur = val_old;
                 fc->fils = c ->fils;
+                // printf("fc apres ajouter c fils\n");
+                // printNode(fc,0);
 
                 // Créer un nouveau nœud pour le reste du mot
                 char* tmp = malloc((strlen(m)+1)*sizeof(char)); //("abc\0")

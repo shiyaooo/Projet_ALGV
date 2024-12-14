@@ -367,33 +367,48 @@ void PATsuppressionRec(PAT** A, char* mot){
             if(strcmp(current->cle, END_OF_WORD) == 0){
                 free(current->cle);
                 current->valeur =0;
-                current->cle = NULL;
+                // current->cle = NULL;
                 break;
             }
         }
 
         if(current->cle[0] == mot[0]){
-            
+            // printf("ghsdsjkh _\n");
+            // printNode(current,0);
+
             // Cas 1 : suppression de la clé complète
             char* tmp = concat(mot, END_OF_WORD);
             if(strcmp(current->cle, tmp) == 0){
+                printf("here\n");
                 free(current->cle);
                 current->valeur = 0; 
-                current->cle = NULL;
-            }else{
+                // current->cle = NULL;
+                
+                }else{
                 // Cas 2 : suppression dans un sous-arbre
                 int len_com = prefixe(current->cle,mot);
                 if(len_com >= 0){
                     char* rest_mot = mot + len_com;
+                    // printf("current fils\n");
+                    // printPAT(current->fils);
                     PATsuppression(&(current->fils), rest_mot);
+                    
                 }
+                printf("current is\n");
+              
+                // printf("current is\n");
+                // printPAT(current->fils);
+                // // printPAT(*A);
+                // printf("dsrrqsqrdf\n");
             }
 
-            // printf("current->cle %s\n",current->cle);
+            // printf("current\n");
+            // printNode(current,0);
+            // for(int i = 0)
             int nb_fils = 0;
             Dic_enf* s[MAX_SIZE];
             for(int i= 0; current->fils!=NULL && current->fils->node[i] !=  NULL; i++){ 
-                //printf("current->fils->node[i]->cle %s\n", current->fils->node[i]->cle);
+                // printf("current->fils->node[i]->cle %s\n", current->fils->node[i]->cle);
                 if(current->fils->node[i]->cle != NULL){
                     Dic_enf* de = consDic_enf(current->fils->node[i]->cle,current->fils->node[i]->valeur );
                     de -> enf = current->fils->node[i]->fils;
@@ -403,13 +418,15 @@ void PATsuppressionRec(PAT** A, char* mot){
             }
             s[nb_fils] = NULL;
 
+        
+            
             // si un seul fils reste
             if(nb_fils == 1){
                 char* newcle = concat(current->cle, s[0]->cle);
                 free(current->cle);
                 current->cle = strdup(newcle);
                 current->valeur = s[0]-> val;
-                // free(current->fils);
+                free(current->fils);
                 current->fils = s[0]->enf;
                 free(s[0]->cle);
                 s[0]->cle = NULL;
@@ -442,7 +459,6 @@ void PATsuppression(PAT** A, char* mot){
     }
 
 }
-
 
 
 
@@ -491,7 +507,7 @@ PAT* PATfusion(PAT* A, PAT* B){
 
             // Vérifier si le nœud existe déjà dans A
             int existsInA = is_existsIN(cle_b[0], A);
-            if(existsInA == 0 ) {
+            if(existsInA == 0) {
                 printf("dd\n");
                 ajouter_racine(&A, bNode);
                 // printf("ajouter racine\n");
@@ -517,7 +533,8 @@ PAT* PATfusion(PAT* A, PAT* B){
                         // printf("clea[0] = %c, cle b[0] = %c\n",cle_a[0], cle_b[0]);
                         if(strcmp(cle_a, cle_b) == 0){
                             printf("ge\n");
-                            if(cle_a[strlen(cle_a)-1] == ' '){
+                            printf("acle, bcle: %s, %s\n", cle_a, cle_b);
+                            if(cle_a[strlen(cle_a)-1] == ' ' && cle_b[strlen(cle_b)-1] == ' '){
                                 printf("fs\n");
                                 aNode->valeur = aNode->valeur + bNode->valeur ;
                             }else
@@ -528,36 +545,59 @@ PAT* PATfusion(PAT* A, PAT* B){
                             char* pref_com = strndup(cle_a, len_com);
                             char* a_rest = cle_a + len_com;
                             char* b_rest = cle_b + len_com;
+                            printf("pre_cem = %s, a_res = %s, b_rest = %s\n",pref_com, a_rest,b_rest);
+
                             Node* F = NodeCons(a_rest);
                             PAT* Fp = PATCons(F); 
-                            printf("pre_cem = %s, a_res = %s, b_rest = %s\n",pref_com, a_rest,b_rest);
-                            for(int i = 0; aNode->fils!=NULL && aNode->fils->node[i]!=NULL; i++){
-                                ajouter_fils(F, aNode->fils->node[i]);
+
+                            printf("avant ajouter les aNode fils dans F:\n");
+                            printPAT(Fp);
+
+                            // for(int i = 0; aNode->fils!=NULL && aNode->fils->node[i]!=NULL; i++){
+                            //     ajouter_fils(F, aNode->fils->node[i]);
+                            // }
+
+                            if(strcmp(F->cle, "") != 0){
+                                printf("ghfgh\n");
+                                for(int i = 0; aNode->fils!=NULL && aNode->fils->node[i]!=NULL; i++){
+                                    ajouter_fils(F, aNode->fils->node[i]);
+                                }
+                            }else{
+                                // printf("fdfgdr\n");
+                                Fp = PATVide();
+                                for(int i = 0; aNode->fils!=NULL && aNode->fils->node[i]!=NULL; i++){
+                                    printf("aNode->fils->node[i]\n");
+                                    printNode(aNode->fils->node[i],0);
+                                    ajouter_racine(&Fp, aNode->fils->node[i]);
+                                }
                             }
+
                             printf("apres ajouter les aNode fils dans F:\n");
                             printPAT(Fp);
 
-
+                            int val_oldb = bNode->valeur;
                             Node* G = NodeCons(b_rest);
+                            G ->valeur = val_oldb; 
                             PAT* Gp = PATCons(G);
-                            printf("avant ajouter tous les fils de bNode dans G:\n");
-                            printPAT(Gp);
+                            // printf("avant ajouter tous les fils de bNode dans G:\n");
+                            // printPAT(Gp);
                             if(strcmp(G->cle, "") != 0){
-                                printf("ghfgh\n");
+                                // printf("ghfgh\n");
                                 for(int i = 0; bNode->fils!=NULL && bNode->fils->node[i]!=NULL; i++){
                                     ajouter_fils(G, bNode->fils->node[i]);
                                 }
                             }else{
-                                printf("fdfgdr\n");
+                                // printf("fdfgdr\n");
                                 Gp = PATVide();
                                 for(int i = 0; bNode->fils!=NULL && bNode->fils->node[i]!=NULL; i++){
+                                    printf("bNode->fils->node[i]\n");
+                                    printNode(bNode->fils->node[i],0);
                                     ajouter_racine(&Gp, bNode->fils->node[i]);
                                 }
-
                             }
                              
-                            printf("apres ajouter tous les fils de bNode dans G:\n");
-                            printPAT(Gp);
+                            // printf("apres ajouter tous les fils de bNode dans G:\n");
+                            // printPAT(Gp);
 
                             aNode->cle = strdup(pref_com);
                             aNode->valeur = 0;

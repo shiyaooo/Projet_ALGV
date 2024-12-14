@@ -165,7 +165,7 @@ int main() {
     printf("Il y a %d de mots du dictionnaire le mot '%s' est préfixe.\n", nb_prefixe, m);
 
     printf("\nSupprimer un mot dans l'arbre PAT.\n");
-    m = "res";
+    m = "dse";
     printPAT(pp);
     PATsuppression(&pp, m);
     printf("PAT apres supprime le mot '%s' :\n", m);
@@ -179,18 +179,15 @@ int main() {
     printf(" et :\n");
     Node* tt = NodeCons("ABC ");
     PAT* ptt = PATCons(tt);
-    PATinsertion(&ptt, "ABCD");
-    // printPAT(ptt);
-    PATinsertion(&ptt, "A"); 
-    PATinsertion(&ptt, "AC"); 
+    PATinsertion(&ptt, "AACG");
+    PATinsertion(&ptt, "dessouss"); 
+    PATinsertion(&ptt, "ABCd"); 
     printPAT(ptt);
     PAT* test = PATfusion(pp, ptt);
     printf("Le resultat obtenu est :\n");
     printPAT(test);
 
    
-
-
     // Libération de la mémoire
     for (int i = 0; list_mot[i] != NULL; i++) {
         free(list_mot[i]);
@@ -199,7 +196,7 @@ int main() {
 
     //libererNode(n);
     libererPAT(p);
-    libererPAT(pp);
+    // libererPAT(pp);
     libererPAT(pat);
 
     return 0;
