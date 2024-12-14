@@ -88,7 +88,8 @@ int main(int argc, char *argv[]) {
     setCpt(0);
     int index = 0;
     TrieH* th = charger_trie(content, &index);
-    /*
+
+    
     // lecture du fichier .txt
     // et suppressions successives des mots dans le trie hybride
     file = fopen(argv[1], "r");
@@ -96,15 +97,33 @@ int main(int argc, char *argv[]) {
         printf("Erreur lors de l'ouverture du fichier .txt\n");
         return 1;
     }
-    
+    /*
+    char* dactylo = "dactylo";
+    printf("%ld\n", strlen(dactylo));
+    */
     char line[256];
     while (fgets(line, sizeof(line), file)) {
-        //printf("%s", line);
+        //size_t len = strlen(line);
+        //printf("Avant suppression du \\n, longueur: %zu, ligne: '%s'\n", len, line);
+        //printf("%ld\n", strlen(line));
         line[strcspn(line, "\n")] = '\0';
+        //len = strlen(line);
+        //printf("Après suppression du \\n, longueur: %zu, ligne '%s'\n", len, line);
         th = Suppression(th, line);
     }
     fclose(file);
-    */
+
+    /* test de ListeMots */
+    
+    List* liste = ListeMots(th);
+    int i = 1;
+    List* tmp = liste;
+    while (tmp!=NULL) {
+        printf("%d : %s\n", i, tmp->mot);
+        tmp = tmp->suiv;
+        i++;
+    }
+    
     // Ecrire un fichier .json
     file = fopen("trie.json", "w");
 

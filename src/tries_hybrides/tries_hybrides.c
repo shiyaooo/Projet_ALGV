@@ -14,9 +14,18 @@ char prem(char* c) {
 char* reste(char* c) {
     size_t len = strlen(c);
     char* reste = (char*)malloc(len * sizeof(char));
+    /*
     for(int i=1;i<len;i++) {
         reste[i-1] = c[i];
     }
+    */
+    /*
+    if (reste == NULL) {
+        perror("Erreur d'allocation mémoire");
+        return c;
+    }
+    */
+    strcpy(reste, c + 1);
     return reste;
 }
 

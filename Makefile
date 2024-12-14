@@ -1,9 +1,13 @@
 CC = /usr/bin/gcc
 CFLAGS = -Wall
 
-all: main_trie inserer_trie suppression_trie main_patrie
+all: trie
 
 # Tries hybrides
+
+trie: main_trie inserer_trie suppression_trie liste_mots_trie 
+
+patricia: main_patrie
 
 tries_hybrides.o: src/tries_hybrides/tries_hybrides.c
 	$(CC) $(CFLAGS) -c src/tries_hybrides/tries_hybrides.c
@@ -32,7 +36,10 @@ suppression_trie: tries_hybrides.o fonctions_avancees.o ecriture_lecture.o
 main_patrie: Patricia_Tries.o fonct_avc.o
 	$(CC) $(CFLAGS) -o main_patrie src/Patricia-Tries/main.c Patricia_Tries.o fonct_avc.o
 
+liste_mots_trie: tries_hybrides.o fonctions_avancees.o ecriture_lecture.o
+	$(CC) $(CFLAGS) -o liste_mots_trie src/tries_hybrides/liste_mots_trie.c tries_hybrides.o fonctions_avancees.o ecriture_lecture.o -lm
+
 clean:
-	rm -f *.o main_trie inserer_trie suppression_trie
+	rm -f *.o main_trie inserer_trie suppression_trie liste_mots_trie
 
 .PHONY: all clean

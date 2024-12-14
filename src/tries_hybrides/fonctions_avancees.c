@@ -275,7 +275,7 @@ TrieH* Suppression(TrieH* arbre, char* mot) {
     }
     char pm = prem(mot);
     char rac = Rac(arbre);
-    
+    //printf("%s : %ld\n", mot, strlen(mot));
     if (strlen(mot) == 1) {
         if (rac == pm && Val(arbre)!=-1) {
             arbre->v = -1;
@@ -312,8 +312,7 @@ TrieH* Suppression(TrieH* arbre, char* mot) {
     
     if (pm < rac) {
         arbre->inf = Suppression(Inf(arbre), mot);
-    }
-    else if (pm > rac) {
+    } else if (pm > rac) {
         arbre->sup = Suppression(Sup(arbre), mot);
     } else {
         arbre->eq = Suppression(Eq(arbre), reste(mot));
