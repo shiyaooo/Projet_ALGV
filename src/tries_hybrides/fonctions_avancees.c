@@ -289,7 +289,7 @@ TrieH* Suppression(TrieH* arbre, char* mot) {
             }
             TrieH* sup = Sup(arbre);
             if (EstVide(sup)==0) {
-                if (nouv==NULL) {
+                if (EstVide(nouv)==1) {
                     free(arbre);
                     return sup;
                 }
@@ -304,6 +304,7 @@ TrieH* Suppression(TrieH* arbre, char* mot) {
                     tmp = tmpsup;
                 }
             }
+            //printf("%c %d\n", rac, Val(arbre));
             free(arbre);
             return nouv;
         }
