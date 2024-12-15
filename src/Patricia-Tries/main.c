@@ -3,10 +3,11 @@
 #include <string.h>
 #include "Patricia_Tries.h"
 #include "fonct_avc.h"
+#include "patricia_json.h"
 #include <ctype.h>  
 #include <stdbool.h>
 #include <unistd.h>
-// gcc -Wall -o main main.c Patricia_Tries.c fonct_avc.c
+//  gcc -Wall -o main main.c Patricia_Tries.c fonct_avc.c ecriture_lecture_patricia.c -I/usr/include/cjson -lcjson
 
 int main() {
     /*****************************EX1*****************************/
@@ -177,17 +178,28 @@ int main() {
     // PAT* pt = PATCons(t); 
     printPAT(pp);
     printf(" et :\n");
-    Node* tt = NodeCons("ABC ");
+    Node* tt = NodeCons("BBC ");
     PAT* ptt = PATCons(tt);
     PATinsertion(&ptt, "AACG");
+    PATinsertion(&ptt, "ABCdef"); 
     PATinsertion(&ptt, "dessouss"); 
-    PATinsertion(&ptt, "ABCd"); 
     printPAT(ptt);
-    PAT* test = PATfusion(pp, ptt);
-    printf("Le resultat obtenu est :\n");
-    printPAT(test);
+    // PAT* test = PATfusion(pp, ptt);
+    // printf("Le resultat obtenu est :\n");
+    // printPAT(test);
 
-   
+    printf("\nAfficher un noeud en format JSON\n") ;
+    //打印树的 JSON 形式
+    print_node_json(ptt->node[0]);
+
+    printf("\nAfficher un PAT en format JSON\n") ;
+    print_pat_json(pat);
+
+    printf("\nEcrire un PAT en format JSON dans un file\n") ;
+    ecrire_patricia("exemple",pat);
+
+
+
     // Libération de la mémoire
     for (int i = 0; list_mot[i] != NULL; i++) {
         free(list_mot[i]);
