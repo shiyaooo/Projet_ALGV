@@ -7,7 +7,7 @@ all: trie patricia
 
 trie: main_trie inserer_trie suppression_trie liste_mots_trie profondeur_moyenne_trie prefixe_trie
 
-patricia: main_patrie
+patricia: main_patrie inserer_patricia suppression_patricia liste_mots_patricia profondeur_moyenne_patricia prefixe_patricia fusion_patricia
 
 tries_hybrides.o: src/tries_hybrides/tries_hybrides.c
 	$(CC) $(CFLAGS) -c src/tries_hybrides/tries_hybrides.c
@@ -36,9 +36,6 @@ inserer_trie: tries_hybrides.o fonctions_avancees.o ecriture_lecture.o
 suppression_trie: tries_hybrides.o fonctions_avancees.o ecriture_lecture.o
 	$(CC) $(CFLAGS) -o suppression_trie src/tries_hybrides/suppression_trie.c tries_hybrides.o fonctions_avancees.o ecriture_lecture.o -lm
 
-main_patrie: Patricia_Tries.o fonct_avc.o patricia_json.o
-	$(CC) $(CFLAGS) -o main_patrie src/Patricia-Tries/main.c Patricia_Tries.o fonct_avc.o patricia_json.o -I/usr/include/cjson -lcjson
-
 liste_mots_trie: tries_hybrides.o fonctions_avancees.o ecriture_lecture.o
 	$(CC) $(CFLAGS) -o liste_mots_trie src/tries_hybrides/liste_mots_trie.c tries_hybrides.o fonctions_avancees.o ecriture_lecture.o -lm
 
@@ -48,7 +45,28 @@ profondeur_moyenne_trie: tries_hybrides.o fonctions_avancees.o ecriture_lecture.
 prefixe_trie: tries_hybrides.o fonctions_avancees.o ecriture_lecture.o
 	$(CC) $(CFLAGS) -o prefixe_trie src/tries_hybrides/prefixe_trie.c tries_hybrides.o fonctions_avancees.o ecriture_lecture.o -lm
 
+main_patrie: Patricia_Tries.o fonct_avc.o patricia_json.o
+	$(CC) $(CFLAGS) -o main_patrie src/Patricia-Tries/main.c Patricia_Tries.o fonct_avc.o patricia_json.o -I/usr/include/cjson -lcjson
+
+inserer_patricia: Patricia_Tries.o fonct_avc.o patricia_json.o
+	$(CC) $(CFLAGS) -o inserer_patricia src/Patricia-Tries/test_patricia/inserer_patricia.c Patricia_Tries.o fonct_avc.o patricia_json.o -I/usr/include/cjson -lcjson
+
+suppression_patricia: Patricia_Tries.o fonct_avc.o patricia_json.o
+	$(CC) $(CFLAGS) -o suppression_patricia src/Patricia-Tries/test_patricia/suppression_patricia.c Patricia_Tries.o fonct_avc.o patricia_json.o -I/usr/include/cjson -lcjson
+
+liste_mots_patricia: Patricia_Tries.o fonct_avc.o patricia_json.o
+	$(CC) $(CFLAGS) -o liste_mots_patricia src/Patricia-Tries/test_patricia/liste_mots_patricia.c Patricia_Tries.o fonct_avc.o patricia_json.o -I/usr/include/cjson -lcjson
+
+profondeur_moyenne_patricia: Patricia_Tries.o fonct_avc.o patricia_json.o
+	$(CC) $(CFLAGS) -o profondeur_moyenne_patricia src/Patricia-Tries/test_patricia/profondeur_moyenne_patricia.c Patricia_Tries.o fonct_avc.o patricia_json.o -I/usr/include/cjson -lcjson
+
+prefixe_patricia: Patricia_Tries.o fonct_avc.o patricia_json.o
+	$(CC) $(CFLAGS) -o prefixe_patricia src/Patricia-Tries/test_patricia/prefixe_patricia.c Patricia_Tries.o fonct_avc.o patricia_json.o -I/usr/include/cjson -lcjson
+
+fusion_patricia: Patricia_Tries.o fonct_avc.o patricia_json.o
+	$(CC) $(CFLAGS) -o fusion_patricia src/Patricia-Tries/test_patricia/fusion_patricia.c Patricia_Tries.o fonct_avc.o patricia_json.o -I/usr/include/cjson -lcjson
+
 clean:
-	rm -f *.o main_trie inserer_trie suppression_trie liste_mots_trie profondeur_moyenne_trie prefixe_trie
+	rm -f *.o main_trie inserer_trie suppression_trie liste_mots_trie profondeur_moyenne_trie prefixe_trie patricia
 
 .PHONY: all clean

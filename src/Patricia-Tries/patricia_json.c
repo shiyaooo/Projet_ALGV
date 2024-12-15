@@ -174,7 +174,6 @@ void print_pat_json(PAT* pat) {
 
 
 Node* json_to_node(cJSON* json_node){
-    printf("geyg\n");
     if (!json_node) return NULL;
 
     // Lire le label du nœud
@@ -187,7 +186,7 @@ Node* json_to_node(cJSON* json_node){
     // Lire le champ "is_end_of_word"
     cJSON* is_end_of_word = cJSON_GetObjectItem(json_node, "is_end_of_word");
     int valeur = (is_end_of_word && cJSON_IsTrue(is_end_of_word)) ? 1 : 0;
-    printf("is_end_of_word %d\n",cJSON_IsTrue(is_end_of_word));
+    // printf("is_end_of_word %d\n",cJSON_IsTrue(is_end_of_word));
     // Créer un nœud avec le label et la valeur
     Node* node ;
     if(valeur == 0) node = NodeCons(label->valuestring);

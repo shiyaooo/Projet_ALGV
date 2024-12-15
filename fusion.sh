@@ -1,4 +1,5 @@
 #!/bin/bash
+#chmod +x fusion.sh
 
 # Check if exactly two arguments are provided
 if [ "$#" -ne 3 ]; then
@@ -13,10 +14,10 @@ z=$3
 # Check if x is either 0 or 1
 if [ "$x" -eq 0 ]; then
     echo "Running prefixe_patricia.c with argument $y"
-    ./prefixe_patricia "$y" "$z"
+    ./fusion_patricia "$y" "$z"
 elif [ "$x" -eq 1 ]; then
     echo "Running prefixe_trie.c with argument $y"
-    ./prefixe_trie "$y" "$z"
+    #./fusion_patricia "$y" "$z"
 else
     echo "Error: x must be 0 or 1"
     exit 1
