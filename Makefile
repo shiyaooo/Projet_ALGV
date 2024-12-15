@@ -1,7 +1,7 @@
 CC = /usr/bin/gcc
 CFLAGS = -Wall
 
-all: trie
+all: trie patricia
 
 # Tries hybrides
 
