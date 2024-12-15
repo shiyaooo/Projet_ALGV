@@ -105,8 +105,11 @@ void collecterMots(Node* racine, char* prefixe, char*** resultats, int* taille, 
     strcpy(mot_courant, prefixe);
     strcat(mot_courant, racine->cle);
 
+
+    // printf("mot courant %s\n", mot_courant);
+
     // Si ce nœud marque la fin d'un mot
-    if(racine -> valeur >0){
+    if(racine -> valeur > 0){
         //Redimensionner le tab si nécessaire
         if(*taille >= *capacite){
             *capacite *=2;
@@ -114,6 +117,7 @@ void collecterMots(Node* racine, char* prefixe, char*** resultats, int* taille, 
         }
         //ajouter le mot au tab
         if(mot_courant[strlen(mot_courant)-1]==' '){
+            // printf("mot courant %sf\n", mot_courant);
             (*resultats)[*taille] = strndup(mot_courant, strlen(mot_courant)-1);
         }else{
             (*resultats)[*taille] = strdup(mot_courant);
@@ -124,6 +128,9 @@ void collecterMots(Node* racine, char* prefixe, char*** resultats, int* taille, 
     //Parcourir les sous-fils
     if(racine->fils != NULL){
         for(int i = 0; racine->fils->node[i] != NULL; i++){
+            if(mot_courant[strlen(mot_courant)-1]==' '){
+                mot_courant = strndup(mot_courant, strlen(mot_courant)-1);
+            }
             collecterMots(racine->fils->node[i], mot_courant, resultats, taille, capacite);
         }
     }
@@ -135,7 +142,6 @@ void collecterMots(Node* racine, char* prefixe, char*** resultats, int* taille, 
 
 char** ListeMotsdansPAT(PAT* A){
     if(A == NULL) return NULL;
-
     //Initialiser le tab de résultat
     int cap = 10;
     int taille = 0;
@@ -490,11 +496,9 @@ int is_existsIN(char c, PAT* A){
 PAT* PATfusion(PAT* A, PAT* B){
     // Si l'un des arbres est vide, retourner l'autre
     if(EstVide(A) == 1) {
-        printf("ch\n");
         return B;
     }
     else if(EstVide(B) == 1){
-        printf("hc\n");
         return A;
     } 
     else{
@@ -508,7 +512,6 @@ PAT* PATfusion(PAT* A, PAT* B){
             // Vérifier si le nœud existe déjà dans A
             int existsInA = is_existsIN(cle_b[0], A);
             if(existsInA == 0) {
-                printf("dd\n");
                 ajouter_racine(&A, bNode);
                 // printf("ajouter racine\n");
                 // printPAT(A);
@@ -532,25 +535,25 @@ PAT* PATfusion(PAT* A, PAT* B){
                     else */if (cle_a[0] == cle_b[0]){
                         // printf("clea[0] = %c, cle b[0] = %c\n",cle_a[0], cle_b[0]);
                         if(strcmp(cle_a, cle_b) == 0){
-                            printf("ge\n");
-                            printf("acle, bcle: %s, %s\n", cle_a, cle_b);
+                            // printf("ge\n");
+                            // printf("acle, bcle: %s, %s\n", cle_a, cle_b);
                             if(cle_a[strlen(cle_a)-1] == ' ' && cle_b[strlen(cle_b)-1] == ' '){
-                                printf("fs\n");
+                                // printf("fs\n");
                                 aNode->valeur = aNode->valeur + bNode->valeur ;
                             }else
                                aNode->fils = PATfusion(aNode->fils, bNode->fils);
                         } else{
-                            printf("hh\n");
+                            // printf("hh\n");
                             int len_com = prefixe(cle_a, cle_b);
                             char* pref_com = strndup(cle_a, len_com);
                             char* a_rest = cle_a + len_com;
                             char* b_rest = cle_b + len_com;
-                            printf("pre_cem = %s, a_res = %s, b_rest = %s\n",pref_com, a_rest,b_rest);
+                            // printf("pre_cem = %s, a_res = %s, b_rest = %s\n",pref_com, a_rest,b_rest);
 
                             Node* F = NodeCons(a_rest);
                             PAT* Fp = PATCons(F); 
 
-                            printf("avant ajouter les aNode fils dans F:\n");
+                            // printf("avant ajouter les aNode fils dans F:\n");
                             printPAT(Fp);
 
                             // for(int i = 0; aNode->fils!=NULL && aNode->fils->node[i]!=NULL; i++){
@@ -558,7 +561,7 @@ PAT* PATfusion(PAT* A, PAT* B){
                             // }
 
                             if(strcmp(F->cle, "") != 0){
-                                printf("ghfgh\n");
+                                // printf("ghfgh\n");
                                 for(int i = 0; aNode->fils!=NULL && aNode->fils->node[i]!=NULL; i++){
                                     ajouter_fils(F, aNode->fils->node[i]);
                                 }
@@ -566,13 +569,13 @@ PAT* PATfusion(PAT* A, PAT* B){
                                 // printf("fdfgdr\n");
                                 Fp = PATVide();
                                 for(int i = 0; aNode->fils!=NULL && aNode->fils->node[i]!=NULL; i++){
-                                    printf("aNode->fils->node[i]\n");
+                                    // printf("aNode->fils->node[i]\n");
                                     printNode(aNode->fils->node[i],0);
                                     ajouter_racine(&Fp, aNode->fils->node[i]);
                                 }
                             }
 
-                            printf("apres ajouter les aNode fils dans F:\n");
+                            // printf("apres ajouter les aNode fils dans F:\n");
                             printPAT(Fp);
 
                             int val_oldb = bNode->valeur;
@@ -590,7 +593,7 @@ PAT* PATfusion(PAT* A, PAT* B){
                                 // printf("fdfgdr\n");
                                 Gp = PATVide();
                                 for(int i = 0; bNode->fils!=NULL && bNode->fils->node[i]!=NULL; i++){
-                                    printf("bNode->fils->node[i]\n");
+                                    // printf("bNode->fils->node[i]\n");
                                     printNode(bNode->fils->node[i],0);
                                     ajouter_racine(&Gp, bNode->fils->node[i]);
                                 }

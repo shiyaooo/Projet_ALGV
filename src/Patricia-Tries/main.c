@@ -196,7 +196,7 @@ int main() {
     // print_pat_json(pat);
 
     // printf("\nEcrire un PAT en format JSON dans un file\n") ;
-    // ecrire_patricia("exemple",pat);
+    ecrire_patricia("exemple.json",pat);
 
     printf("\nConstruit le noeud depuis le format JSON\n") ;
     printNode(ptt->node[0],0);
@@ -205,12 +205,27 @@ int main() {
     printf("apres construire\n");
     printNode(jsonn,0);
 
+    PAT* pj_ess = PATVide();
+    PATinsertion(&pj_ess, "car");
+    PATinsertion(&pj_ess, "cat");
+    PATinsertion(&pj_ess, "cart");
+    PATinsertion(&pj_ess, "dog");
+    PATinsertion(&pj_ess, "bat");
     printf("\nConstruit le PAT depuis le format JSON\n") ;
-    printPAT(ptt);
-    cJSON* pj = pat_to_json(pat);
+    printPAT(pj_ess);
+    cJSON* pj = pat_to_json(pj_ess);
     PAT* jsonp = json_to_pat(pj);
     printf("apres construire\n");
     printPAT(jsonp);
+
+    PATsuppression(&pj_ess, "car");
+    PATsuppression(&pj_ess, "cat");
+    PATsuppression(&pj_ess, "cart");
+    PATsuppression(&pj_ess, "dog");
+    PATsuppression(&pj_ess, "bat");
+    printf("apres suppression\n");        
+    printPAT(pj_ess);
+
 
 
     // Libération de la mémoire
