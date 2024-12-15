@@ -178,7 +178,7 @@ int main() {
     // PAT* pt = PATCons(t); 
     printPAT(pp);
     printf(" et :\n");
-    Node* tt = NodeCons("BBC ");
+    Node* tt = NodeCons("ABC ");
     PAT* ptt = PATCons(tt);
     PATinsertion(&ptt, "AACG");
     PATinsertion(&ptt, "ABCdef"); 
@@ -192,12 +192,25 @@ int main() {
     //打印树的 JSON 形式
     print_node_json(ptt->node[0]);
 
-    printf("\nAfficher un PAT en format JSON\n") ;
-    print_pat_json(pat);
+    // printf("\nAfficher un PAT en format JSON\n") ;
+    // print_pat_json(pat);
 
-    printf("\nEcrire un PAT en format JSON dans un file\n") ;
-    ecrire_patricia("exemple",pat);
+    // printf("\nEcrire un PAT en format JSON dans un file\n") ;
+    // ecrire_patricia("exemple",pat);
 
+    printf("\nConstruit le noeud depuis le format JSON\n") ;
+    printNode(ptt->node[0],0);
+    cJSON* nj = node_to_json(ptt->node[0]);
+    Node* jsonn = json_to_node(nj);
+    printf("apres construire\n");
+    printNode(jsonn,0);
+
+    printf("\nConstruit le PAT depuis le format JSON\n") ;
+    printPAT(ptt);
+    cJSON* pj = pat_to_json(pat);
+    PAT* jsonp = json_to_pat(pj);
+    printf("apres construire\n");
+    printPAT(jsonp);
 
 
     // Libération de la mémoire

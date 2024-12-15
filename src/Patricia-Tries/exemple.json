@@ -264,4 +264,19 @@
 					"children":	{
 					}
 				},
-				
+				"t":	{
+					"label":	"te ",
+					"is_end_of_word":	true,
+					"children":	{
+					}
+				}
+			}
+		},
+		"u":	{
+			"label":	"un ",
+			"is_end_of_word":	true,
+			"children":	{
+			}
+		}
+	}
+}

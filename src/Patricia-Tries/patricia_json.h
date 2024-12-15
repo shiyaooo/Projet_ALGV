@@ -12,8 +12,8 @@ int ecrire_patricia(char* namefile, PAT* arbre);
 // /* Modifie la valeur de cpt */
 // void setCpt(int valeur);
 
-// /* Construit le patricia depuis le format JSON */
-// PAT* charger_patricia(char *content, int *index);
+/* Construit le patricia depuis le format JSON */
+PAT* charger_patricia(char *content, int *index);
 
 int compare_nodes(const void* a, const void* b);
 void sort_children(PAT* pat);
@@ -24,5 +24,9 @@ void print_node_json(Node* n);
 cJSON* node_to_json(Node* node);
 cJSON* pat_to_json(PAT* pat);
 void print_pat_json(PAT* pat);
+
+Node* json_to_node(cJSON* json_node);
+PAT* json_to_pat(cJSON* json_node);
+
 
 #endif // PATRICIA_JSON_H

@@ -13,6 +13,7 @@ int main(int argc, char *argv[]) {
 
     // Lire le fichier .txt
     FILE *file = fopen(argv[1], "r");
+    printf("name file %s\n", argv[1]);
     if (file == NULL) {
         printf("Erreur lors de l'ouverture du fichier .txt\n");
         return 1;

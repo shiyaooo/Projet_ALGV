@@ -43,6 +43,12 @@ int ecrire_patricia(char* namefile, PAT* arbre){
     
 }
 
+PAT* charger_patricia(char *content, int *index){
+    return NULL;
+}
+
+
+
 
 int compare_nodes(const void* a, const void* b) {
     Node* nodeA = *((Node**)a);
@@ -69,6 +75,8 @@ cJSON* node_to_json(Node* node) {
     // 将节点信息添加到 JSON 对象中
     cJSON_AddStringToObject(json_node, "label", node->cle);
     if(node->cle[strlen(node->cle)-1] == ' '){
+        char* newcle = strndup(node->cle, strlen(node->cle)-1);
+        cJSON_ReplaceItemInObject(json_node, "label", cJSON_CreateString(newcle));
         cJSON_AddBoolToObject(json_node, "is_end_of_word", true);
     }else{
         cJSON_AddBoolToObject(json_node, "is_end_of_word", false);
@@ -162,4 +170,86 @@ void print_pat_json(PAT* pat) {
     printf("%s\n", json_str);
     free(json_str);
     cJSON_Delete(json_pat);
+}
+
+
+Node* json_to_node(cJSON* json_node){
+    printf("geyg\n");
+    if (!json_node) return NULL;
+
+    // Lire le label du nœud
+    cJSON* label = cJSON_GetObjectItem(json_node, "label");
+    if (!label || !cJSON_IsString(label)) {
+        printf("Erreur : le nœud JSON n'a pas de label valide.\n");
+        return NULL;
+    }
+
+    // Lire le champ "is_end_of_word"
+    cJSON* is_end_of_word = cJSON_GetObjectItem(json_node, "is_end_of_word");
+    int valeur = (is_end_of_word && cJSON_IsTrue(is_end_of_word)) ? 1 : 0;
+    printf("is_end_of_word %d\n",cJSON_IsTrue(is_end_of_word));
+    // Créer un nœud avec le label et la valeur
+    Node* node ;
+    if(valeur == 0) node = NodeCons(label->valuestring);
+    else{
+        char* newcle = concat(label->valuestring, END_OF_WORD);
+        node = NodeCons(newcle);
+    }
+
+    // Lire les enfants (si présents)
+    cJSON* children = cJSON_GetObjectItem(json_node, "children");
+    // char* json_str = cJSON_Print(children);
+    // printf("%s\n", json_str);
+
+    if (children && cJSON_IsObject(children)) {
+        // PAT* pat = (PAT*)malloc(sizeof(PAT));
+        // pat->node = NULL;
+
+        cJSON* child_json = NULL;
+        cJSON_ArrayForEach(child_json, children) {
+            // char* json = cJSON_Print(child_json);
+            // printf("json %s\n", json);
+            // Récupérer le nœud enfant
+            Node* child_node = json_to_node(child_json);
+            if (child_node) {
+                ajouter_fils(node, child_node);
+                if(cJSON_IsTrue(is_end_of_word) == 1){
+                    Node* end = NodeCons(END_OF_WORD);
+                    node->valeur = 0;
+                    ajouter_fils(node, end);
+                }
+            }
+        }
+
+        // Ajouter les enfants au nœud courant
+        // node->fils = pat;
+    }
+
+    return node;
+}
+
+PAT* json_to_pat(cJSON* json_node) {
+    if (json_node == NULL) {
+        return NULL;
+    }
+
+    // Allouer un nouvel objet PAT pour contenir les nœuds
+    PAT* pat = (PAT*)malloc(sizeof(PAT));
+    pat->node = NULL;
+    
+    // Extraire les enfants du nœud JSON
+    cJSON* children = cJSON_GetObjectItemCaseSensitive(json_node, "children");
+    if (children && cJSON_IsObject(children)) {
+        cJSON* child_json = NULL;
+        cJSON_ArrayForEach(child_json, children) {
+            // Convertir chaque enfant JSON en un nœud Node
+            Node* child_node = json_to_node(child_json);
+            if (child_node) {
+                // Ajouter le nœud enfant à la Patricia Tree
+                ajouter_racine(&pat, child_node);
+            }
+        }
+    }
+    
+    return pat;
 }

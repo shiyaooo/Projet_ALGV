@@ -22,7 +22,7 @@ fonct_avc.o: src/Patricia-Tries/fonct_avc.c
 	$(CC) $(CFLAGS) -c src/Patricia-Tries/fonct_avc.c
 
 patricia_json.o: src/Patricia-Tries/patricia_json.c
-	$(CC) $(CFLAGS) -c src/Patricia-Tries/patricia_json.c
+	$(CC) $(CFLAGS) -c src/Patricia-Tries/patricia_json.c -I/usr/include/cjson -lcjson
 
 main_trie: tries_hybrides.o fonctions_avancees.o  
 	$(CC) $(CFLAGS) -o main_trie src/tries_hybrides/main.c tries_hybrides.o fonctions_avancees.o -lm
