@@ -1,11 +1,12 @@
 #include "tries_hybrides.h"
 #include "fonctions_avancees.h"
 #include "ecriture_lecture.h"
+#include <stdio.h>
 #include <stdlib.h>
 
 int main(int argc, char *argv[]) {
-    if (argc!=2) {
-        printf("Usage: %s <arbre.json>\n", argv[0]);
+    if (argc!=3) {
+        printf("Usage: %s <arbre.json> <s>\n", argv[0]);
         return 1;
     }
 
@@ -28,23 +29,17 @@ int main(int argc, char *argv[]) {
     TrieH* th = charger_trie(content, &index);
 
 
-    // Ecrire le fichier mot.txt
-    file = fopen("mot.txt", "w");
+    // Ecrire le fichier prefixe.txt
+    file = fopen("prefixe.txt", "w");
 
     if (file == NULL) {
         printf("Erreur lors de l'ouverture du fichier .txt\n");
         return 1;
     }
 
-    // liste les mots contenus dans l'arbre dans le fichier mot.txt
-    List* liste = ListeMots(th);
-    //int i = 1;
-    List* tmp = liste;
-    while (tmp!=NULL) {
-        fprintf(file, "%s\n", tmp->mot);
-        tmp = tmp->suiv;
-        //i++;
-    }
+    // écrit le nombre de mots dont s est prefixe dans le fichier prefixe.txt
+    int nbmots = Prefixe(th, argv[2]);
+    fprintf(file, "%d", nbmots);
 
     fclose(file);
 

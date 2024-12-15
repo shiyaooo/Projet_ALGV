@@ -1,6 +1,7 @@
 #include "tries_hybrides.h"
 #include "fonctions_avancees.h"
 #include "ecriture_lecture.h"
+#include <stdio.h>
 #include <stdlib.h>
 
 int main(int argc, char *argv[]) {
@@ -28,23 +29,17 @@ int main(int argc, char *argv[]) {
     TrieH* th = charger_trie(content, &index);
 
 
-    // Ecrire le fichier mot.txt
-    file = fopen("mot.txt", "w");
+    // Ecrire le fichier profondeur.txt
+    file = fopen("profondeur.txt", "w");
 
     if (file == NULL) {
         printf("Erreur lors de l'ouverture du fichier .txt\n");
         return 1;
     }
 
-    // liste les mots contenus dans l'arbre dans le fichier mot.txt
-    List* liste = ListeMots(th);
-    //int i = 1;
-    List* tmp = liste;
-    while (tmp!=NULL) {
-        fprintf(file, "%s\n", tmp->mot);
-        tmp = tmp->suiv;
-        //i++;
-    }
+    // écrit la profondeur moyenne dans le fichier profondeur.txt
+    int prof = ProfondeurMoyenne(th);
+    fprintf(file, "%d", prof);
 
     fclose(file);
 
