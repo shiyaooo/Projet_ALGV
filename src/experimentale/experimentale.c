@@ -136,3 +136,9 @@ void eciture_words(Words* words){
     }
     fclose(f);
 }
+
+//temps de construction de la structure complète
+//temps d'ajout d'un nouveau mot (éventuellement n'existant pas en anglais) dans chacune des structures
+// temps de la suppression d'un ensemble de mots des structures
+// comparer profondeur des structures
+// HauteurPAT

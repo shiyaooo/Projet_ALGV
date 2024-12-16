@@ -11,7 +11,7 @@
 /*****************************EX2*****************************/
 
 
-bool recherchePAT(PAT* A, char* mot) { // O(l*k*log n) où l = longeur de mot et n = nb total de noeud
+bool recherchePAT(PAT* A, char* mot) { // O(l * log n) où l = longeur de mot et n = nb total de racine
     if (A == NULL || mot == NULL) {
         return false; // Patricia Trie vide ou mot invalide
     }else{
@@ -97,7 +97,7 @@ int comparemots(const void* a, const void* b) { // O(1)
 }
 
 // Fonction auxiliaire récursive pour collecter les mots
-void collecterMots(Node* racine, char* prefixe, char*** resultats, int* taille, int* capacite) { // 
+void collecterMots(Node* racine, char* prefixe, char*** resultats, int* taille, int* capacite) { // O(n) n= nb de noeud dans un noeud
     if(racine == NULL) return;
 
     // Construire le mot courant en concaténant le préfixe et la clé du nœud
@@ -140,7 +140,7 @@ void collecterMots(Node* racine, char* prefixe, char*** resultats, int* taille, 
 }
 
 
-char** ListeMotsdansPAT(PAT* A){
+char** ListeMotsdansPAT(PAT* A){ // O()
     if(A == NULL) return NULL;
     //Initialiser le tab de résultat
     int cap = 10;
@@ -161,7 +161,7 @@ char** ListeMotsdansPAT(PAT* A){
 }
 
 // une fonction qui compte les pointeurs vers Nil :
-int ComptageNildansNode(Node* n){
+int ComptageNildansNode(Node* n){ //O(n)
     if(n == NULL) return 1;
     int cmpt =0;
     if (n->fils != NULL) {
@@ -182,7 +182,7 @@ int ComptageNildansNode(Node* n){
 
 }
 
-int ComptageNildansPAT(PAT* A){
+int ComptageNildansPAT(PAT* A){ // O(n)
     if (A == NULL || A->node == NULL) {
         return 1; // Un pointeur NULL trouvé pour un arbre vide
     }
@@ -201,7 +201,7 @@ int ComptageNildansPAT(PAT* A){
 }
 
 // une fonction qui calcule la hauteur de l’arbre : 
-int HauteurNode(Node* n) {
+int HauteurNode(Node* n) { // O(log n)
     if(n == NULL) return 0; // Hauteur d'un nœud NULL est 0
 
     int h_max = 0;
@@ -219,7 +219,7 @@ int HauteurNode(Node* n) {
     return 1 + h_max;
 }
 
-int HauteurPAT(PAT* A){
+int HauteurPAT(PAT* A){ // O(log n)
     if(A == NULL) return 0;
 
     int h_max = 0;
@@ -234,7 +234,7 @@ int HauteurPAT(PAT* A){
 
 // une fonction qui calcule la profondeur moyenne des feuilles de l’arbre :
 // Fonction qui parcourt l'arbre et calcule la somme des profondeurs des feuilles
-void calculerProfondeursFeuilles(Node* A, int profondeur, int* somme, int* nb_feuilles) {
+void calculerProfondeursFeuilles(Node* A, int profondeur, int* somme, int* nb_feuilles) { //O(log n)
     if (A == NULL) return; // Si le nœud est NULL, on ne fait rien
 
     // Si le nœud est une feuille (pas d'enfants)
@@ -251,7 +251,7 @@ void calculerProfondeursFeuilles(Node* A, int profondeur, int* somme, int* nb_fe
 }
 
 
-int ProfondeurMoyennePAT(PAT* A) {
+int ProfondeurMoyennePAT(PAT* A) { // O(log n)
     if (A == NULL || A->node == NULL) return 0;  // Si l'arbre est vide, retourner 0
 
     int somme_profondeur = 0;  // Somme des profondeurs des feuilles
@@ -277,7 +277,7 @@ int ProfondeurMoyennePAT(PAT* A) {
 // Fonction qui parcourt l'arbre pour compter le nombre de mots ayant un préfixe donné
 
 // Compte tous les mots dans un sous-arbre à partir d'un nœud donné
-void compterMotsDansSousArbre(Node* A, int* count) {
+void compterMotsDansSousArbre(Node* A, int* count) {  //  O(n)
     if (A == NULL) return;
 
     if(A->valeur > 0) (*count) += 1; // Compte les mots terminant à ce nœud
@@ -286,7 +286,7 @@ void compterMotsDansSousArbre(Node* A, int* count) {
     }
 }
 
-void compterMotsPrefixe(Node* A, char* mot, int* count) {
+void compterMotsPrefixe(Node* A, char* mot, int* count) { // O(Ln)
     if (A == NULL) return; // Si le nœud est NULL ou mot invalide, on quitte
 
     int len_com = prefixe(A->cle, mot); // Longueur du plus long préfixe commun entre la clé et le mot
@@ -313,7 +313,7 @@ void compterMotsPrefixe(Node* A, char* mot, int* count) {
     
 }
 
-int PrefixedansPAT(PAT* A, char* mot) {
+int PrefixedansPAT(PAT* A, char* mot) { // O(L*n)
     if (A == NULL || mot == NULL) return 0; // Si l'arbre ou le mot est invalide
 
     int count = 0;
@@ -333,7 +333,7 @@ int PrefixedansPAT(PAT* A, char* mot) {
 
 
 // Fonction pour concaténer deux chaînes
-char* concat(const char* a, const char* b) {
+char* concat(const char* a, const char* b) { // O(1)
     char* result = malloc(strlen(a) + strlen(b) + 1);
     strcpy(result, a);
     strcat(result, b);
@@ -357,8 +357,8 @@ void libererDic_enf(Dic_enf* de){
         free(de);
     }
 }
-
-void PATsuppressionRec(PAT** A, char* mot){
+ 
+void PATsuppressionRec(PAT** A, char* mot){ // O(L*n)
     if((recherchePAT(*A,mot) == 0 && strlen(mot) !=0)){
         return;
     }
@@ -476,7 +476,7 @@ int compare_node(const void* a, const void* b) {
 }
 
 
-void PATsuppression(PAT** A, char* mot){
+void PATsuppression(PAT** A, char* mot){ // O(L*n)
     PATsuppressionRec(A, mot);
     
     int nb_racine = 0;
@@ -582,7 +582,7 @@ int is_existsIN(char c, PAT* A){
 }
 
 
-PAT* PATfusion(PAT* A, PAT* B){
+PAT* PATfusion(PAT* A, PAT* B){ // O((n1​+n2​)⋅Lmax​)
     // Si l'un des arbres est vide, retourner l'autre
     if(EstVide(A) == 1) {
         return B;
