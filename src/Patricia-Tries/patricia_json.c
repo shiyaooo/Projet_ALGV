@@ -12,7 +12,7 @@ int ecrire_patricia(char* namefile, PAT* arbre){
         return 1;
     }
 
-    if (EstVide(arbre)==1 || arbre->node[0] == NULL) {
+    if (EstVide(arbre)==1 || arbre->node == NULL) {
         fputs("null", file);
         return 1;
     }

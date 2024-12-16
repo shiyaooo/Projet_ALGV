@@ -11,7 +11,7 @@
 /*****************************EX2*****************************/
 
 
-bool recherchePAT(PAT* A, char* mot) {
+bool recherchePAT(PAT* A, char* mot) { // O(l*k*log n) où l = longeur de mot et n = nb total de noeud
     if (A == NULL || mot == NULL) {
         return false; // Patricia Trie vide ou mot invalide
     }else{
@@ -64,7 +64,7 @@ bool recherchePAT(PAT* A, char* mot) {
 
 
 // fonction qui compte les mots présents dans le dictionnaire : 
-int ComptageMotsdansPAT(PAT* A){
+int ComptageMotsdansPAT(PAT* A){ // O(n) où n = nb de noeud
     if(A == NULL){
         return 0;
     }
@@ -90,14 +90,14 @@ int ComptageMotsdansPAT(PAT* A){
 // fonction qui liste les mots du dictionnaire dans l’ordre alphabétique :
 
 // Fonction de comparaison pour trier les fils
-int comparemots(const void* a, const void* b) {
+int comparemots(const void* a, const void* b) { // O(1)
     char* A = *(char**) a;
     char* B = *(char**) b;
     return strcmp(A, B);
 }
 
 // Fonction auxiliaire récursive pour collecter les mots
-void collecterMots(Node* racine, char* prefixe, char*** resultats, int* taille, int* capacite) {
+void collecterMots(Node* racine, char* prefixe, char*** resultats, int* taille, int* capacite) { // 
     if(racine == NULL) return;
 
     // Construire le mot courant en concaténant le préfixe et la clé du nœud
