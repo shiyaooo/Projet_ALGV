@@ -277,6 +277,7 @@ TrieH* Suppression(TrieH* arbre, char* mot) {
     char rac = Rac(arbre);
     //printf("%s : %ld\n", mot, strlen(mot));
     if (strlen(mot) == 1) {
+        //printf("%c %d\n", rac, Val(arbre));
         if (rac == pm && Val(arbre)!=-1) {
             arbre->v = -1;
             if (EstVide(Eq(arbre))==0) {    // si le mot était un préfixe
@@ -285,11 +286,14 @@ TrieH* Suppression(TrieH* arbre, char* mot) {
             //free(arbre->l);
             TrieH* nouv = NULL;
             if (EstVide(Inf(arbre))==0) {
-                nouv = Inf(arbre);
+                TrieH* inf = Inf(arbre);
+                nouv = inf;
+                arbre->inf = TH_Vide();
             }
             TrieH* sup = Sup(arbre);
             if (EstVide(sup)==0) {
                 if (EstVide(nouv)==1) {
+                    arbre->sup = TH_Vide();
                     free(arbre);
                     return sup;
                 }
@@ -304,11 +308,12 @@ TrieH* Suppression(TrieH* arbre, char* mot) {
                     tmp = tmpsup;
                 }
             }
-            //printf("%c %d\n", rac, Val(arbre));
             free(arbre);
             return nouv;
         }
-        return arbre;   // Sinon, le mot n'est pas présent
+        else if (EstVide(Inf(arbre))==1 && EstVide(Sup(arbre))==1) {
+            return arbre;   // Sinon, le mot n'est pas présent
+        }
     }
     
     if (pm < rac) {
@@ -321,6 +326,7 @@ TrieH* Suppression(TrieH* arbre, char* mot) {
         //arbre->inf = Suppression(Inf(arbre), mot);
     } else if (pm > rac) {
         TrieH* sup = Sup(arbre);
+        //printf("ICI");
         if (EstVide(sup)==1) {  // Si vide,   //   //
             arbre->sup = sup;
         } else {                // Sinon,       //
@@ -328,6 +334,7 @@ TrieH* Suppression(TrieH* arbre, char* mot) {
         }
         //arbre->sup = Suppression(Sup(arbre), mot);
     } else {
+        //printf("%c ", rac);
         TrieH* eq = Eq(arbre);
         if (EstVide(eq)==1) {   // Si vide,   //   //
             arbre->eq = eq;
