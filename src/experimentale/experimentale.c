@@ -138,7 +138,34 @@ void eciture_words(Words* words){
 }
 
 //temps de construction de la structure complète
+/*double measureTime_cons_PAT(PAT* (*fun)(PAT*), Node* data){
+    clock_t start, end;
+    start = clock();
+    //printf(" \n");
+    PAT* fb= fun(data);
+    end = clock();
+    free(fb);
+    return ((double) (end - start)) / CLOCKS_PER_SEC;
+}*/
+
+
 //temps d'ajout d'un nouveau mot (éventuellement n'existant pas en anglais) dans chacune des structures
-// temps de la suppression d'un ensemble de mots des structures
-// comparer profondeur des structures
-// HauteurPAT
+double measureTime_ajout_un_seul_PAT(void (*function)(PAT**, char*),PAT** pat, char* cle){
+    clock_t start, end;
+    start = clock();
+    function(pat,cle);
+    end = clock();
+    // free(result);
+    return ((double) (end - start)) / CLOCKS_PER_SEC;
+}
+
+// temps de la suppression d'un mot des structures
+double measureTime_supp_PAT(void (*function)(PAT**, char*),PAT** pat, char* cle){
+    clock_t start, end;
+    start = clock();
+    function(pat,cle);
+    end = clock();
+    // free(result);
+    return ((double) (end - start)) / CLOCKS_PER_SEC;
+}
+
