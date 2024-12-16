@@ -1,7 +1,7 @@
 CC = /usr/bin/gcc
 CFLAGS = -Wall
 
-all: trie patricia experimentale
+all: trie patricia main_experimentale #experimentale
 
 # Tries hybrides
 
@@ -23,6 +23,9 @@ fonct_avc.o: src/Patricia-Tries/fonct_avc.c
 
 patricia_json.o: src/Patricia-Tries/patricia_json.c
 	$(CC) $(CFLAGS) -c src/Patricia-Tries/patricia_json.c -I/usr/include/cjson -lcjson
+
+experimentale.o: src/experimentale/experimentale.c
+	$(CC) $(CFLAGS) -c src/experimentale/experimentale.c -I/usr/include/cjson -lcjson
 
 main_trie: tries_hybrides.o fonctions_avancees.o  
 	$(CC) $(CFLAGS) -o main_trie src/tries_hybrides/main.c tries_hybrides.o fonctions_avancees.o -lm
@@ -66,19 +69,11 @@ prefixe_patricia: Patricia_Tries.o fonct_avc.o patricia_json.o
 fusion_patricia: Patricia_Tries.o fonct_avc.o patricia_json.o
 	$(CC) $(CFLAGS) -o fusion_patricia src/Patricia-Tries/test_patricia/fusion_patricia.c Patricia_Tries.o fonct_avc.o patricia_json.o -I/usr/include/cjson -lcjson
 
-
-# partie expérimentale
-
-experimentale: main_etude_trie
-
-experimentale.o:
-	$(CC) $(CFLAGS) -c src/experimentale/experimentale.c
-
-main_etude_trie: experimentale.o
-	$(CC) $(CFLAGS) -o main_etude src/experimentale/main_etude_trie.c experimentale.o -lm
+main_experimentale: experimentale.o  Patricia_Tries.o fonct_avc.o patricia_json.o
+	$(CC) $(CFLAGS) -o main_experimentale src/experimentale/main.c experimentale.o  Patricia_Tries.o fonct_avc.o patricia_json.o -I/usr/include/cjson -lcjson
 
 
 clean:
-	rm -f *.o main_trie inserer_trie suppression_trie liste_mots_trie profondeur_moyenne_trie prefixe_trie patricia main_etude_trie
+	rm -f *.o main_trie inserer_trie suppression_trie liste_mots_trie profondeur_moyenne_trie prefixe_trie patricia main_experimentale
 
 .PHONY: all clean

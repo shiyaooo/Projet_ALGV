@@ -1,10 +1,8 @@
 #ifndef EXPERIMANTALE_H
 #define EXPERIMANTALE_H
-/*
 #include "../Patricia-Tries/Patricia_Tries.h"
 #include "../Patricia-Tries/fonct_avc.h"
-*/
-// #include "../Patricia-Tries/patricia_json.h"
+#include "../Patricia-Tries/patricia_json.h"
 #include <dirent.h>
 
 typedef struct words{
@@ -21,6 +19,9 @@ void print_List_Word(Words* lw);
 void free_List_word(Words* lw) ;
 Words* read_Files_Shakespeare(char* nomDossier);
 void eciture_words(Words* words);
+
+double measureTime_ajout_un_seul_PAT(void (*function)(PAT**, char*),PAT** pat, char* cle);
+double measureTime_supp_PAT(void (*function)(PAT**, char*),PAT** pat, char* cle);
 
 
 #endif

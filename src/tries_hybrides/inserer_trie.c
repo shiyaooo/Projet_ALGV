@@ -22,11 +22,11 @@ int main(int argc, char *argv[]) {
     TrieH* th = NULL;
     char line[256];
     while (fgets(line, sizeof(line), file)) {
-        if (cpt==27183) {
+        line[strcspn(line, "\n")] = '\0';
+        if (strcmp(line, "Killed") == 0) {
             continue;
         }
         //printf("%s", line);
-        line[strcspn(line, "\n")] = '\0';
         th = TH_Ajout(line, th, cpt);
         cpt++;
     }
