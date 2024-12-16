@@ -120,6 +120,36 @@ Words* read_Files_Shakespeare(char* nomDossier){
    
     return words;
 }
+
+Words* read_ouvre_Shakespeare(char* nomFichier) {
+    FILE *file;
+    char word[256];
+    Words* words=NULL;
+    
+    // Ouvrir le fichier en mode lecture
+    file = fopen(nomFichier, "r");
+    if (file == NULL) {
+        printf("Impossible d'ouvrir le fichier %s\n", nomFichier);
+        return NULL;
+    }
+
+    int taille_max=256;
+    char buffer[taille_max];
+    
+    // Lire chaque mot du fichier
+    while (fgets(buffer,256,file)!=NULL){
+        sscanf(buffer,"%s",word);
+        //inserer dans une liste de word apres comparer avec elm
+        words=insertWordsNotExist(word,words);
+        //words_initial=insert_word_in_List(word,words_initial);
+    }
+
+    // Fermer le fichier
+    fclose(file);
+    return words;
+}
+
+
    
 
 void eciture_words(Words* words){
@@ -159,11 +189,31 @@ double measureTime_ajout_un_seul_PAT(void (*function)(PAT**, char*),PAT** pat, c
     return ((double) (end - start)) / CLOCKS_PER_SEC;
 }
 
+double measureTime_ajout_un_seul_TH(TrieH* (*function)(char*, TrieH*, int),char* cle, TrieH* th, int val){
+    clock_t start, end;
+    start = clock();
+    function(cle, th, val);
+    end = clock();
+    // free(result);
+    return ((double) (end - start)) / CLOCKS_PER_SEC;
+}
+
 // temps de la suppression d'un mot des structures
 double measureTime_supp_PAT(void (*function)(PAT**, char*),PAT** pat, char* cle){
     clock_t start, end;
     start = clock();
     function(pat,cle);
+    end = clock();
+    // free(result);
+    return ((double) (end - start)) / CLOCKS_PER_SEC;
+}
+
+
+// temps de la fusion 2 PAT en un des structures
+double measureTime_fusion_PAT(PAT* (*function)(PAT*, PAT*),PAT* a, PAT* b){
+    clock_t start, end;
+    start = clock();
+    function(a,b);
     end = clock();
     // free(result);
     return ((double) (end - start)) / CLOCKS_PER_SEC;

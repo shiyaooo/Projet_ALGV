@@ -8,6 +8,8 @@
 #include <ctype.h>  
 #include <stdbool.h>
 #include <unistd.h>
+#include <time.h>
+
 //  gcc -Wall -o main main.c experimentale.c
 
 int main() {
@@ -16,17 +18,66 @@ int main() {
     eciture_words(lwords);
     printf("Successful!\n");
 
+    // Words* lw_ou = read_ouvre_Shakespeare("../../Shakespeare/1henryiv.txt");
+    // print_List_Word(lw_ou);
+
+    struct dirent *dir;
+
+     DIR *d=opendir("../../Shakespeare");
+     if(!d){
+        fprintf(stderr,"erreur d'ouverture du dossier ../../Shakespeare\n");
+        return -1;
+     }
+    // Lire tous les fichiers dans le répertoire
+    Words* words=NULL;
+    int i = 0;
+    PAT* pats[MAX_SIZE];
+    while((dir=readdir(d))!=NULL){
+        // Assurez-vous de ne pas traiter les entrées spéciales "." et ".."
+        if (strcmp(dir->d_name, ".") != 0 && strcmp(dir->d_name, "..") != 0) {
+            //printf("file=%s\n",dir->d_name);
+            char file_path[MAX_SIZE];
+            sprintf(file_path,"%s/%s","../../Shakespeare",dir->d_name);
+            file_path[strlen(file_path)]='\0';
+            words = read_ouvre_Shakespeare(file_path);
+            PAT* pat = NULL;
+            while(words != NULL){
+                PATinsertion(&pat, words->data);
+                words = words ->suiv;
+            } 
+            pats[i] = pat;
+            words = NULL;
+            i++;
+            //printf("words->data=%s\n",words->data);
+            
+        }
+        
+    }
+    closedir(d);  
+
+
     /*---------------- Temps de construction de la structure complète ----------------*/
     // DANS PAT
     double temps_cons_pat = 0;
     PAT* pat = NULL;
     Words* tmp = lwords;
     while(tmp != NULL){
-        temps_cons_pat += measureTime_ajout_un_seul_PAT(PATinsertion, (&pat), tmp->data);
+        temps_cons_pat += measureTime_ajout_un_seul_th(PATinsertion, (&pat), tmp->data);
         tmp = tmp->suiv;
     }
     // print_List_Word(lwords);
     printf("temps de construction PAT est : %.7f\n", temps_cons_pat);
+
+    // DANS TRIE
+    double temps_cons_th = 0;
+    TrieH* th = NULL;
+    tmp = lwords;
+    while(tmp != NULL){
+        temps_cons_th += measureTime_ajout_un_seul_th(TH_Ajout, tmp->data, th, cpt);
+        tmp = tmp->suiv;
+    }
+    // print_List_Word(lwords);
+    printf("temps de construction PAT est : %.7f\n", temps_cons_th);
 
     /*---------------- Temps d'ajout d'un nouveau mot dans les structures ----------------*/
     // DANS PAT
@@ -53,6 +104,24 @@ int main() {
     }
     // printPAT(pat);
     printf("Temps de la suppression d'un ensemble de mots dans PAT: %.7f\n", temps_supp_pat);
+
+    /*---------------- Temps de fusions d'arbres encodant chacun une oeuvre  ----------------*/
+    // DANS PAT
+    double temps_fusion_pat = 0;
+    pat = NULL;
+    for(int j =0; j < i; j++){
+        clock_t start, end;
+        start = clock();
+        pat = PATfusion(pat,pats[j]);
+        end = clock();
+        // printf("temps %f\n",measureTime_fusion_PAT(PATfusion,pat,pats[j]));
+        // printPAT(pat);
+        temps_fusion_pat += ((double) (end - start)) / CLOCKS_PER_SEC;
+
+    }
+    // printPAT(pat);
+    printf("temps de fusion les PAT est : %.7f\n", temps_fusion_pat);
+
 
 
     return 0;

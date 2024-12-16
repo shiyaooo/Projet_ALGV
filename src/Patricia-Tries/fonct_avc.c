@@ -643,7 +643,7 @@ PAT* PATfusion(PAT* A, PAT* B){ // O((n1​+n2​)⋅Lmax​)
                             PAT* Fp = PATCons(F); 
 
                             // printf("avant ajouter les aNode fils dans F:\n");
-                            printPAT(Fp);
+                            // printPAT(Fp);
 
                             // for(int i = 0; aNode->fils!=NULL && aNode->fils->node[i]!=NULL; i++){
                             //     ajouter_fils(F, aNode->fils->node[i]);
@@ -665,7 +665,7 @@ PAT* PATfusion(PAT* A, PAT* B){ // O((n1​+n2​)⋅Lmax​)
                             }
 
                             // printf("apres ajouter les aNode fils dans F:\n");
-                            printPAT(Fp);
+                            // printPAT(Fp);
 
                             int val_oldb = bNode->valeur;
                             Node* G = NodeCons(b_rest);
