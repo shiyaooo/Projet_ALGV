@@ -5,8 +5,9 @@
 #include <ctype.h>  
 #include <stdbool.h>
 #include <unistd.h>
-#include "../tries_hybrides/tries_hybrides.h"
-#include "../tries_hybrides/fonctions_avancees.h"
+#include "tries_hybrides.h"
+#include "fonctions_avancees.h"
+#include "ecriture_lecture.h"
 //  gcc -Wall -o main main.c experimentale.c
 
 int main() {
@@ -15,8 +16,7 @@ int main() {
     eciture_words(lwords);
     printf("Successful!\n");
 
-    /* Q 6.10*/
-
+    /*---------------- Temps de construction de la structure complète ----------------*/
     // Construction du trie hybride
     FILE *file = fopen("words.txt", "r");
     // printf("name file %s\n", argv[1]);
@@ -44,6 +44,8 @@ int main() {
     ecrire_trie(file, th, 0);
     fclose(file);
     printf("trie.json construit");
+
+    /*---------------- Temps d'ajout d'un nouveau mot dans les structures ----------------*/
 
     return 0;
 }

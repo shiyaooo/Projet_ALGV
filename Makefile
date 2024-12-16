@@ -72,6 +72,8 @@ fusion_patricia: Patricia_Tries.o fonct_avc.o patricia_json.o
 main_experimentale: experimentale.o  Patricia_Tries.o fonct_avc.o patricia_json.o
 	$(CC) $(CFLAGS) -o main_experimentale src/experimentale/main.c experimentale.o  Patricia_Tries.o fonct_avc.o patricia_json.o -I/usr/include/cjson -lcjson
 
+#main_etude_trie: experimentale.o tries_hybrides.o fonctions_avancees.o ecriture_lecture.o
+#	$(CC) $(CFLAGS) -o main_etude_trie src/experimentale/main_etude_trie.c experimentale.o tries_hybrides.o fonctions_avancees.o ecriture_lecture.o
 
 clean:
 	rm -f *.o main_trie inserer_trie suppression_trie liste_mots_trie profondeur_moyenne_trie prefixe_trie patricia main_experimentale
