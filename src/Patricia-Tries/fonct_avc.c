@@ -376,6 +376,7 @@ void PATsuppressionRec(PAT** A, char* mot){
                 // current->cle = NULL;
                 break;
             }
+            // return; 
         }
 
         if(current->cle[0] == mot[0]){
@@ -384,12 +385,14 @@ void PATsuppressionRec(PAT** A, char* mot){
 
             // Cas 1 : suppression de la clé complète
             char* tmp = concat(mot, END_OF_WORD);
-            if(strcmp(current->cle, tmp) == 0){
-                printf("here\n");
+            if(strcmp(current->cle, tmp) == 0 /*&& current -> valeur > 0*/){
+                // printf("dcd\n");
                 free(current->cle);
                 current->valeur = 0; 
+                // if(current->fils == NULL) 
                 // current->cle = NULL;
-                
+                // printPAT(*A);
+                return ;
                 }else{
                 // Cas 2 : suppression dans un sous-arbre
                 int len_com = prefixe(current->cle,mot);
@@ -397,10 +400,10 @@ void PATsuppressionRec(PAT** A, char* mot){
                     char* rest_mot = mot + len_com;
                     // printf("current fils\n");
                     // printPAT(current->fils);
-                    PATsuppression(&(current->fils), rest_mot);
+                    PATsuppressionRec(&(current->fils), rest_mot);
                     
                 }
-                printf("current is\n");
+                // printf("current is\n");
               
                 // printf("current is\n");
                 // printPAT(current->fils);
@@ -408,14 +411,15 @@ void PATsuppressionRec(PAT** A, char* mot){
                 // printf("dsrrqsqrdf\n");
             }
 
-            // printf("current\n");
+            // printf("current cle %s_\n", current->cle);
             // printNode(current,0);
             // for(int i = 0)
             int nb_fils = 0;
             Dic_enf* s[MAX_SIZE];
             for(int i= 0; current->fils!=NULL && current->fils->node[i] !=  NULL; i++){ 
                 // printf("current->fils->node[i]->cle %s\n", current->fils->node[i]->cle);
-                if(current->fils->node[i]->cle != NULL){
+                // printf(" isValidKey(current->fils->node[i]->cle) == 1 ?%d\n",  isValidKey(current->fils->node[i]->cle) == 1);
+                if(/*current->fils->node[i]->cle != NULL ||*/ isValidKey(current->fils->node[i]->cle) == 1){
                     Dic_enf* de = consDic_enf(current->fils->node[i]->cle,current->fils->node[i]->valeur );
                     de -> enf = current->fils->node[i]->fils;
                     s[nb_fils] = de;
@@ -424,7 +428,7 @@ void PATsuppressionRec(PAT** A, char* mot){
             }
             s[nb_fils] = NULL;
 
-        
+            // printf("nb_fils %d\n",nb_fils);
             
             // si un seul fils reste
             if(nb_fils == 1){
@@ -439,7 +443,9 @@ void PATsuppressionRec(PAT** A, char* mot){
                 s[0]->val  = 0;   
                 free(newcle); 
             }
-
+            // if(current->fils == NULL && current->valeur == 0 && isValidKey(current->cle) == 0){
+            //     current = NULL;
+            // }
             // Libérer les mémoires
             free(tmp);
             for(int i = 0; i < nb_fils ; i++){
@@ -452,19 +458,102 @@ void PATsuppressionRec(PAT** A, char* mot){
     }
 }
 
+int compare_node(const void* a, const void* b) {
+    Node* node_a = *(Node**)a;
+    Node* node_b = *(Node**)b;
+
+    // 如果某个节点为 NULL，则将其视为最大
+    if (node_a == NULL && node_b != NULL) {
+        return 1;  // node_a 大于 node_b
+    } else if (node_a != NULL && node_b == NULL) {
+        return -1; // node_a 小于 node_b
+    } else if (node_a == NULL && node_b == NULL) {
+        return 0;  // 两者相等
+    }
+
+    // 正常情况下按 label 排序
+    return strcmp(node_a->cle, node_b->cle);
+}
+
+
 void PATsuppression(PAT** A, char* mot){
     PATsuppressionRec(A, mot);
+    
+    int nb_racine = 0;
+
+    while((*A )->node[nb_racine] != NULL){
+        // printf("node\n");
+        // printNode((*A )->node[nb_racine] ,0);
+        nb_racine++;
+    }
+    // printf("avant pat is\n");
     // printPAT(*A);
-    for(int i = 0; (*A )->node[i] != NULL; i++){ 
-        if((*A )->node[i]->cle == NULL){
-            // libererPAT((*A )->node[i]->fils);
-            free((*A)->node[i]);
-            (*A)->node[i]= NULL;
-            break;
+
+    // qsort((*A)->node, nb_racine, sizeof(Node*), compare_node);
+
+    // printf("mots is %s_\n", mot);
+    // printf("nb_racine %d\n", nb_racine);
+    // printf("-----------\n");
+    // int i;
+    // for(i = 0; (*A )->node[i] != NULL/* i < nb_racine*/; i++){ 
+    //     if((*A )->node[i]->cle == NULL || ((*A )->node[i]->valeur == 0 && (*A )->node[i]->fils == NULL)){
+    //         // libererPAT((*A )->node[i]->fils);
+    //         free((*A)->node[i]);
+    //         (*A)->node[i]= NULL;
+    //         break;
+    //     }
+    // }
+
+    // 遍历节点并删除无效节点
+    for (int i = 0; i < nb_racine; i++) {
+        Node* current_node = (*A)->node[i];
+        if (current_node == NULL) {
+            continue;  // 跳过 NULL 节点
+        }
+
+        // 判断是否为无效节点（valeur 为 0 且无子节点）
+        if ((current_node->valeur == 0 && current_node->fils == NULL) || (isValidKey(current_node->cle) == 0)) {
+            // printf("Suppression du nœud : %s\n", current_node->cle);
+
+            // 释放子树（如果存在），然后释放当前节点
+            libererPAT(current_node->fils);
+            free(current_node);
+            (*A)->node[i] = NULL;
         }
     }
 
+    // 将剩余有效节点重新整理到根节点数组前部
+    int j = 0;
+    for (int i = 0; i < nb_racine; i++) {
+        if ((*A)->node[i] != NULL) {
+            (*A)->node[j++] = (*A)->node[i];
+        }
+    }
+
+    // 清理多余的节点引用
+    while (j < nb_racine) {
+        (*A)->node[j++] = NULL;
+    }
+    if((*A)->node[0] == NULL){
+        (*A) ->node = NULL;
+        *A = NULL;
+    }
+    // printf("apres pat is \n");
+    // printPAT(*A);
+    
 }
+
+
+int isValidKey(char* key) {
+    if (key == NULL) return 0;
+    if (strcmp(key, "")==0) return 0;
+    for (int i = 0; key[i] != '\0'; i++) {
+        if (!isprint(key[i])) return 0;  // 检查字符是否可打印
+    }
+    return 1;  // 有效键
+}
+
+
 
 
 

@@ -140,7 +140,7 @@ void printPAT(PAT* P){
     //     printNode(P -> racine[i], 0);
     // }
 
-    for(size_t i = 0; P->node[i] != NULL /*&& P->node[i]->cle != NULL*/; i++){
+    for(size_t i = 0; P->node[i] != NULL; i++){
         printNode(P -> node[i], 0);
     }
 }

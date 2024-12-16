@@ -166,11 +166,16 @@ int main() {
     printf("Il y a %d de mots du dictionnaire le mot '%s' est préfixe.\n", nb_prefixe, m);
 
     printf("\nSupprimer un mot dans l'arbre PAT.\n");
-    m = "dse";
-    printPAT(pp);
-    PATsuppression(&pp, m);
-    printf("PAT apres supprime le mot '%s' :\n", m);
-    printPAT(pp);
+    m = "ded";
+    // printPAT(pp);
+    // PATsuppression(&pp, m);
+    // printf("PAT apres supprime le mot '%s' :\n", m);
+    // printPAT(pp);
+
+    // char* uy = malloc(sizeof(char)*4);
+    // strcpy(uy, "njs");
+    // // free(uy);
+    // printf("key is valide ? %d\n", isValidKey(uy));
 
     printf("\nFusionner deux Patricia-tries en un seul.\n");
     printf("les deux Patricia-tries sont: \n");
@@ -205,39 +210,54 @@ int main() {
     printf("apres construire\n");
     printNode(jsonn,0);
 
-    PAT* pj_ess = PATVide();
+    PAT* pj_ess = NULL;
     PATinsertion(&pj_ess, "car");
     PATinsertion(&pj_ess, "cat");
     PATinsertion(&pj_ess, "cart");
     PATinsertion(&pj_ess, "dog");
     PATinsertion(&pj_ess, "bat");
+    PATinsertion(&pj_ess, "gat");
     printf("\nConstruit le PAT depuis le format JSON\n") ;
     printPAT(pj_ess);
     cJSON* pj = pat_to_json(pj_ess);
     PAT* jsonp = json_to_pat(pj);
     printf("apres construire\n");
     printPAT(jsonp);
+    printf("\n\n");
 
-    PATsuppression(&pj_ess, "car");
-    PATsuppression(&pj_ess, "cat");
-    PATsuppression(&pj_ess, "cart");
-    PATsuppression(&pj_ess, "dog");
-    PATsuppression(&pj_ess, "bat");
+    printPAT(pat);
+    pj = pat_to_json(pat);
+    jsonp = json_to_pat(pj);
+    printf("apres construire\n");
+    printPAT(jsonp);
+
+    for (int i = 0; list_mot[i] != NULL; i++) {
+        PATsuppression(&jsonp, list_mot[i]);
+    }
+    // PATsuppression(&jsonp, "car");
+    // PATsuppression(&jsonp, "cat");
+    // PATsuppression(&jsonp, "cart");
+    // PATsuppression(&jsonp, "dog");
+    // PATsuppression(&jsonp, "bat");
+    // PATsuppression(&jsonp, "gat");
     printf("apres suppression\n");        
-    printPAT(pj_ess);
+    printPAT(jsonp);
+    printf("le pat is null %d\n", jsonp==  NULL);
+
+    // print_pat_json(jsonp);
 
 
 
     // Libération de la mémoire
-    for (int i = 0; list_mot[i] != NULL; i++) {
-        free(list_mot[i]);
-    }
-    free(list_mot);
+    // for (int i = 0; list_mot[i] != NULL; i++) {
+    //     free(list_mot[i]);
+    // }
+    // free(list_mot);
 
-    //libererNode(n);
-    libererPAT(p);
-    // libererPAT(pp);
-    libererPAT(pat);
+    // //libererNode(n);
+    // libererPAT(p);
+    // // libererPAT(pp);
+    // libererPAT(pat);
 
     return 0;
 }

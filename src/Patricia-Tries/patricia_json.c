@@ -12,7 +12,7 @@ int ecrire_patricia(char* namefile, PAT* arbre){
         return 1;
     }
 
-    if (EstVide(arbre)==1) {
+    if (EstVide(arbre)==1 || arbre->node[0] == NULL) {
         fputs("null", file);
         return 1;
     }
@@ -74,7 +74,7 @@ cJSON* node_to_json(Node* node) {
 
     // 将节点信息添加到 JSON 对象中
     cJSON_AddStringToObject(json_node, "label", node->cle);
-    if(node->cle[strlen(node->cle)-1] == ' '){
+    if(node->cle[strlen(node->cle)-1] == ' ' && node->valeur > 0){
         char* newcle = strndup(node->cle, strlen(node->cle)-1);
         cJSON_ReplaceItemInObject(json_node, "label", cJSON_CreateString(newcle));
         cJSON_AddBoolToObject(json_node, "is_end_of_word", true);
@@ -128,7 +128,7 @@ cJSON* pat_to_json(PAT* pat) {
     }else{
         cJSON_AddBoolToObject(json_pat, "is_end_of_word", false);
     }
-
+    
 
     // 如果 pat 存在，并且它的子节点数组非空
     if (pat != NULL && pat->node != NULL) {
@@ -159,6 +159,15 @@ cJSON* pat_to_json(PAT* pat) {
         // 如果没有子节点，添加空的 children 对象
         cJSON_AddItemToObject(json_pat, "children", cJSON_CreateObject());
     }
+
+    // 检查当前 JSON 表示是否需要替换为 null
+    // cJSON* children = cJSON_GetObjectItemCaseSensitive(json_pat, "children");
+    // if (strcmp("", cJSON_GetObjectItemCaseSensitive(json_pat, "label")->valuestring) == 0 &&
+    //     cJSON_IsFalse(cJSON_GetObjectItemCaseSensitive(json_pat, "is_end_of_word")) &&
+    //     cJSON_GetArraySize(children) == 0) {
+    //     cJSON_Delete(json_pat);  // 释放原来的 JSON 对象
+    //     return cJSON_CreateNull();  // 返回 null
+    // }
 
     return json_pat;
 }
@@ -213,6 +222,7 @@ Node* json_to_node(cJSON* json_node){
             if (child_node) {
                 ajouter_fils(node, child_node);
                 if(cJSON_IsTrue(is_end_of_word) == 1){
+                    node->cle = strndup(node->cle, strlen(node->cle)-1);
                     Node* end = NodeCons(END_OF_WORD);
                     node->valeur = 0;
                     ajouter_fils(node, end);
@@ -249,6 +259,8 @@ PAT* json_to_pat(cJSON* json_node) {
             }
         }
     }
+
+    
     
     return pat;
 }

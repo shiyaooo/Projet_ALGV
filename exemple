@@ -3,19 +3,19 @@
 	"is_end_of_word":	false,
 	"children":	{
 		",":	{
-			"label":	",",
+			"label":	", ",
 			"is_end_of_word":	true,
 			"children":	{
 			}
 		},
 		"?":	{
-			"label":	"?",
+			"label":	"? ",
 			"is_end_of_word":	true,
 			"children":	{
 			}
 		},
 		"A":	{
-			"label":	"A",
+			"label":	"A ",
 			"is_end_of_word":	true,
 			"children":	{
 			}
@@ -25,7 +25,7 @@
 			"is_end_of_word":	true,
 			"children":	{
 				"p":	{
-					"label":	"ppel",
+					"label":	"ppel ",
 					"is_end_of_word":	true,
 					"children":	{
 					}
@@ -37,19 +37,19 @@
 			"is_end_of_word":	false,
 			"children":	{
 				"h":	{
-					"label":	"hacune",
+					"label":	"hacune ",
 					"is_end_of_word":	true,
 					"children":	{
 					}
 				},
 				"i":	{
-					"label":	"i",
+					"label":	"i ",
 					"is_end_of_word":	true,
 					"children":	{
 					}
 				},
 				"l":	{
-					"label":	"lavier",
+					"label":	"lavier ",
 					"is_end_of_word":	true,
 					"children":	{
 					}
@@ -59,13 +59,13 @@
 					"is_end_of_word":	false,
 					"children":	{
 						"e":	{
-							"label":	"eur",
+							"label":	"eur ",
 							"is_end_of_word":	true,
 							"children":	{
 							}
 						},
 						"n":	{
-							"label":	"nnait",
+							"label":	"nnait ",
 							"is_end_of_word":	true,
 							"children":	{
 							}
@@ -83,7 +83,7 @@
 					"is_end_of_word":	true,
 					"children":	{
 						"g":	{
-							"label":	"graphie",
+							"label":	"graphie ",
 							"is_end_of_word":	true,
 							"children":	{
 							}
@@ -99,7 +99,7 @@
 							"is_end_of_word":	true,
 							"children":	{
 								"s":	{
-									"label":	"sous",
+									"label":	"sous ",
 									"is_end_of_word":	true,
 									"children":	{
 									}
@@ -109,7 +109,7 @@
 					}
 				},
 				"u":	{
-					"label":	"u",
+					"label":	"u ",
 					"is_end_of_word":	true,
 					"children":	{
 					}
@@ -121,13 +121,13 @@
 			"is_end_of_word":	false,
 			"children":	{
 				"c":	{
-					"label":	"crire",
+					"label":	"crire ",
 					"is_end_of_word":	true,
 					"children":	{
 					}
 				},
 				"l":	{
-					"label":	"lle",
+					"label":	"lle ",
 					"is_end_of_word":	true,
 					"children":	{
 					}
@@ -135,7 +135,7 @@
 			}
 		},
 		"f":	{
-			"label":	"fait",
+			"label":	"fait ",
 			"is_end_of_word":	true,
 			"children":	{
 			}
@@ -145,13 +145,13 @@
 			"is_end_of_word":	false,
 			"children":	{
 				"i":	{
-					"label":	"ial",
+					"label":	"ial ",
 					"is_end_of_word":	true,
 					"children":	{
 					}
 				},
 				"r":	{
-					"label":	"re",
+					"label":	"re ",
 					"is_end_of_word":	true,
 					"children":	{
 					}
@@ -159,7 +159,7 @@
 			}
 		},
 		"l":	{
-			"label":	"la",
+			"label":	"la ",
 			"is_end_of_word":	true,
 			"children":	{
 			}
@@ -169,13 +169,13 @@
 			"is_end_of_word":	false,
 			"children":	{
 				"a":	{
-					"label":	"achine",
+					"label":	"achine ",
 					"is_end_of_word":	true,
 					"children":	{
 					}
 				},
 				"o":	{
-					"label":	"odele",
+					"label":	"odele ",
 					"is_end_of_word":	true,
 					"children":	{
 					}
@@ -183,7 +183,7 @@
 			}
 		},
 		"n":	{
-			"label":	"nous",
+			"label":	"nous ",
 			"is_end_of_word":	true,
 			"children":	{
 			}
@@ -193,25 +193,25 @@
 			"is_end_of_word":	false,
 			"children":	{
 				"a":	{
-					"label":	"ar",
+					"label":	"ar ",
 					"is_end_of_word":	true,
 					"children":	{
 					}
 				},
 				"h":	{
-					"label":	"hrase",
+					"label":	"hrase ",
 					"is_end_of_word":	true,
 					"children":	{
 					}
 				},
 				"r":	{
-					"label":	"rofesseur",
+					"label":	"rofesseur ",
 					"is_end_of_word":	true,
 					"children":	{
 					}
 				},
 				"u":	{
-					"label":	"uisque",
+					"label":	"uisque ",
 					"is_end_of_word":	true,
 					"children":	{
 					}
@@ -223,7 +223,7 @@
 			"is_end_of_word":	true,
 			"children":	{
 				"l":	{
-					"label":	"l",
+					"label":	"l ",
 					"is_end_of_word":	true,
 					"children":	{
 					}
@@ -231,7 +231,7 @@
 			}
 		},
 		"r":	{
-			"label":	"redevables",
+			"label":	"redevables ",
 			"is_end_of_word":	true,
 			"children":	{
 			}
@@ -241,13 +241,13 @@
 			"is_end_of_word":	false,
 			"children":	{
 				"o":	{
-					"label":	"ommes",
+					"label":	"ommes ",
 					"is_end_of_word":	true,
 					"children":	{
 					}
 				},
 				"u":	{
-					"label":	"uperbe",
+					"label":	"uperbe ",
 					"is_end_of_word":	true,
 					"children":	{
 					}
@@ -259,13 +259,13 @@
 			"is_end_of_word":	false,
 			"children":	{
 				"c":	{
-					"label":	"ches",
+					"label":	"ches ",
 					"is_end_of_word":	true,
 					"children":	{
 					}
 				},
 				"t":	{
-					"label":	"te",
+					"label":	"te ",
 					"is_end_of_word":	true,
 					"children":	{
 					}
@@ -273,7 +273,7 @@
 			}
 		},
 		"u":	{
-			"label":	"un",
+			"label":	"un ",
 			"is_end_of_word":	true,
 			"children":	{
 			}

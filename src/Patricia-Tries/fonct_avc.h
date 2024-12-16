@@ -34,6 +34,7 @@ int PrefixedansPAT(PAT* A, char* mot);
 char* concat(const char* a, const char* b);
 Dic_enf* consDic_enf(char* cle, int val);
 void libererDic_enf(Dic_enf* de);
+int isValidKey(char* key) ;
 void PATsuppressionRec(PAT** A, char* mot);
 void PATsuppression(PAT** A, char* mot);
 
