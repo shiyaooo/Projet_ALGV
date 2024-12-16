@@ -1,7 +1,9 @@
 #ifndef EXPERIMANTALE_H
 #define EXPERIMANTALE_H
+/*
 #include "../Patricia-Tries/Patricia_Tries.h"
 #include "../Patricia-Tries/fonct_avc.h"
+*/
 // #include "../Patricia-Tries/patricia_json.h"
 #include <dirent.h>
 

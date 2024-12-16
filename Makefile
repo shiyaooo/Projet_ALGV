@@ -1,7 +1,7 @@
 CC = /usr/bin/gcc
 CFLAGS = -Wall
 
-all: trie patricia
+all: trie patricia experimentale
 
 # Tries hybrides
 
@@ -66,7 +66,19 @@ prefixe_patricia: Patricia_Tries.o fonct_avc.o patricia_json.o
 fusion_patricia: Patricia_Tries.o fonct_avc.o patricia_json.o
 	$(CC) $(CFLAGS) -o fusion_patricia src/Patricia-Tries/test_patricia/fusion_patricia.c Patricia_Tries.o fonct_avc.o patricia_json.o -I/usr/include/cjson -lcjson
 
+
+# partie expérimentale
+
+experimentale: main_etude_trie
+
+experimentale.o:
+	$(CC) $(CFLAGS) -c src/experimentale/experimentale.c
+
+main_etude_trie: experimentale.o
+	$(CC) $(CFLAGS) -o main_etude src/experimentale/main_etude_trie.c experimentale.o -lm
+
+
 clean:
-	rm -f *.o main_trie inserer_trie suppression_trie liste_mots_trie profondeur_moyenne_trie prefixe_trie patricia
+	rm -f *.o main_trie inserer_trie suppression_trie liste_mots_trie profondeur_moyenne_trie prefixe_trie patricia main_etude_trie
 
 .PHONY: all clean
