@@ -80,6 +80,7 @@ main_etude_patricia: experimentale.o  Patricia_Tries.o fonct_avc.o patricia_json
 
 main_etude_trie: experimentale_trie.o tries_hybrides.o fonctions_avancees.o ecriture_lecture.o
 	$(CC) $(CFLAGS) -o main_etude_trie src/experimentale/main_etude_trie.c experimentale_trie.o tries_hybrides.o fonctions_avancees.o ecriture_lecture.o -lm
+
 clean:
 	rm -f *.o main_trie inserer_trie suppression_trie liste_mots_trie profondeur_moyenne_trie prefixe_trie patricia main_etude_patricia main_etude_trie
 
