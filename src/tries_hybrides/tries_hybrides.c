@@ -82,6 +82,13 @@ int Val(TrieH* A) {
 }
 
 /* renvoie une copie du sous-arbre gauche de A */
+TrieH* Inf(TrieH* A) { 
+    if (A == NULL || EstVide(A->inf)) { 
+        return TH_Vide(); 
+    } 
+    return A->inf; 
+}
+/*
 TrieH* Inf(TrieH* A) {
     if (A==NULL) {
         return TH_Vide();
@@ -95,8 +102,15 @@ TrieH* Inf(TrieH* A) {
                        Sup(A->inf), 
                        (A->inf)->v);
 }
-
+*/
 /* renvoie une copie du sous-arbre central de A */
+TrieH* Eq(TrieH* A) { 
+    if (A == NULL || EstVide(A->eq)) { 
+        return TH_Vide(); 
+    } 
+    return A->eq; 
+}
+/*
 TrieH* Eq(TrieH* A) {
     if (A==NULL) {
         return TH_Vide();
@@ -110,8 +124,15 @@ TrieH* Eq(TrieH* A) {
                        Sup(A->eq), 
                        (A->eq)->v);
     }
-
+*/
 /* renvoie une copie du sous-arbre droite de A */
+TrieH* Sup(TrieH* A) { 
+    if (A == NULL || EstVide(A->sup)) { 
+        return TH_Vide(); 
+    } 
+    return A->sup; 
+}
+/*
 TrieH* Sup(TrieH* A) {
     if (A==NULL) {
         return TH_Vide();
@@ -124,8 +145,9 @@ TrieH* Sup(TrieH* A) {
                        Eq(A->sup), 
                        Sup(A->sup), 
                        (A->sup)->v);
-    
+
 }
+*/
 
 
 /* renvoie le trie hybride resultant de l'insertion de c dans A */
@@ -134,7 +156,11 @@ TrieH* TH_Ajout(char* c, TrieH* A, int v) {
         if (strlen(c) == 1) {
             return TrieHybride(prem(c), TH_Vide(), TH_Vide(), TH_Vide(), v);
         } else {
-            return TrieHybride(prem(c), TH_Vide(), TH_Ajout(reste(c), Eq(A), v), TH_Vide(), -1);
+            //return TrieHybride(prem(c), TH_Vide(), TH_Ajout(reste(c), Eq(A), v), TH_Vide(), -1);
+            char* r = reste(c); 
+            TrieH* newTrie = TrieHybride(prem(c), TH_Vide(), TH_Ajout(r, TH_Vide(), v), TH_Vide(), -1); 
+            free_chaine(r); // Libération de la mémoire allouée pour r
+            return newTrie;
         }
     } else {
         char pm = prem(c);
@@ -159,6 +185,27 @@ TrieH* TH_Ajout(char* c, TrieH* A, int v) {
         else if (pm > rac) {
             return TrieHybride(rac, Inf(A), Eq(A), TH_Ajout(c, Sup(A), v), Val(A));
         }
-        return TrieHybride(rac, Inf(A), TH_Ajout(reste(c), Eq(A), v), Sup(A), Val(A));
+        //return TrieHybride(rac, Inf(A), TH_Ajout(reste(c), Eq(A), v), Sup(A), Val(A));
+        char* r = reste(c); 
+        TrieH* newTrie = TrieHybride(rac, A->inf, TH_Ajout(r, A->eq, v), A->sup, A->v); 
+        free_chaine(r); // Libération de la mémoire allouée pour r
+        return newTrie;
+    }
+}
+
+/* libère la mémoire allouée pour un noeud de trie hybride */
+void free_TH(TrieH* A) {
+    if (A != NULL) { 
+        free_TH(A->inf); 
+        free_TH(A->eq); 
+        free_TH(A->sup); 
+        free(A); 
+    } 
+} 
+
+/* libère la mémoire allouée pour une chaîne de caractères */ 
+void free_chaine(char* chaine) { 
+    if (chaine != NULL) { 
+        free(chaine); 
     }
 }

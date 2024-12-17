@@ -45,5 +45,7 @@ int main() {
         printf("INSERE\n");
     }
 
+    free_TH(th);
+
     return 0;
 }

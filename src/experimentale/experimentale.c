@@ -188,7 +188,7 @@ double measureTime_ajout_un_seul_PAT(void (*function)(PAT**, char*),PAT** pat, c
     // free(result);
     return ((double) (end - start)) / CLOCKS_PER_SEC;
 }
-
+/*
 double measureTime_ajout_un_seul_TH(TrieH* (*function)(char*, TrieH*, int),char* cle, TrieH* th, int val){
     clock_t start, end;
     start = clock();
@@ -197,7 +197,7 @@ double measureTime_ajout_un_seul_TH(TrieH* (*function)(char*, TrieH*, int),char*
     // free(result);
     return ((double) (end - start)) / CLOCKS_PER_SEC;
 }
-
+*/
 // temps de la suppression d'un mot des structures
 double measureTime_supp_PAT(void (*function)(PAT**, char*),PAT** pat, char* cle){
     clock_t start, end;

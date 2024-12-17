@@ -45,4 +45,10 @@ char* reste(char* c);
 /* renvoie le trie hybride resultant de l'insertion de c dans A */
 TrieH* TH_Ajout(char* c, TrieH* A, int v);
 
+/* libère la mémoire allouée pour un noeud de trie hybride */
+void free_TH(TrieH* A);
+
+/* libère la mémoire allouée pour une chaîne de caractères */ 
+void free_chaine(char* chaine);
+
 #endif // TRIES_HYBRIDES_H

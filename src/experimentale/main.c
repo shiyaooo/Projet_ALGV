@@ -62,13 +62,14 @@ int main() {
     PAT* pat = NULL;
     Words* tmp = lwords;
     while(tmp != NULL){
-        temps_cons_pat += measureTime_ajout_un_seul_th(PATinsertion, (&pat), tmp->data);
+        temps_cons_pat += measureTime_ajout_un_seul_PAT(PATinsertion, (&pat), tmp->data);
         tmp = tmp->suiv;
     }
     // print_List_Word(lwords);
     printf("temps de construction PAT est : %.7f\n", temps_cons_pat);
 
     // DANS TRIE
+    /*
     double temps_cons_th = 0;
     TrieH* th = NULL;
     tmp = lwords;
@@ -78,7 +79,7 @@ int main() {
     }
     // print_List_Word(lwords);
     printf("temps de construction PAT est : %.7f\n", temps_cons_th);
-
+    */
     /*---------------- Temps d'ajout d'un nouveau mot dans les structures ----------------*/
     // DANS PAT
     double temps_ajout_pat = 0;

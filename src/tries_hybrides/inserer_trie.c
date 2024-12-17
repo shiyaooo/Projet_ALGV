@@ -23,9 +23,6 @@ int main(int argc, char *argv[]) {
     char line[256];
     while (fgets(line, sizeof(line), file)) {
         line[strcspn(line, "\n")] = '\0';
-        if (strcmp(line, "Killed") == 0) {
-            continue;
-        }
         //printf("%s", line);
         th = TH_Ajout(line, th, cpt);
         cpt++;
