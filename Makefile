@@ -1,7 +1,7 @@
 CC = /usr/bin/gcc
 CFLAGS = -Wall
 
-all: trie patricia main_etude_patricia #experimentale
+all: trie patricia main_etude_patricia main_etude_trie #experimentale
 
 # Tries hybrides
 
@@ -72,10 +72,13 @@ fusion_patricia: Patricia_Tries.o fonct_avc.o patricia_json.o
 main_etude_patricia: experimentale.o  Patricia_Tries.o fonct_avc.o patricia_json.o
 	$(CC) $(CFLAGS) -o main_etude_patricia src/experimentale/main_etude_patricia.c experimentale.o  Patricia_Tries.o fonct_avc.o patricia_json.o -I/usr/include/cjson -lcjson
 
-#main_etude_trie: experimentale.o tries_hybrides.o fonctions_avancees.o ecriture_lecture.o
-#	$(CC) $(CFLAGS) -o main_etude_trie src/experimentale/main_etude_trie.c experimentale.o tries_hybrides.o fonctions_avancees.o ecriture_lecture.o
+experimentale_trie.o: src/experimentale/experimentale_trie.c
+	$(CC) $(CFLAGS) -c src/experimentale/experimentale_trie.c
+
+main_etude_trie: experimentale_trie.o tries_hybrides.o fonctions_avancees.o ecriture_lecture.o
+	$(CC) $(CFLAGS) -o main_etude_trie src/experimentale/main_etude_trie.c experimentale_trie.o tries_hybrides.o fonctions_avancees.o ecriture_lecture.o -lm
 
 clean:
-	rm -f *.o main_trie inserer_trie suppression_trie liste_mots_trie profondeur_moyenne_trie prefixe_trie patricia main_etude_patricia
+	rm -f *.o main_trie inserer_trie suppression_trie liste_mots_trie profondeur_moyenne_trie prefixe_trie patricia main_etude_patricia main_etude_trie
 
 .PHONY: all clean
