@@ -106,7 +106,7 @@ Words* read_Files_Shakespeare(char* nomDossier){
                 sscanf(buffer,"%s",word);
                 //inserer dans une liste de word apres comparer avec elm
                 words=insertWordsNotExist(word,words);
-                //words_initial=insert_word_in_List(word,words_initial);
+                // words=insert_word_in_List(word,words);
             }
             //printf("words->data=%s\n",words->data);
             
@@ -141,7 +141,7 @@ Words* read_ouvre_Shakespeare(char* nomFichier) {
         sscanf(buffer,"%s",word);
         //inserer dans une liste de word apres comparer avec elm
         words=insertWordsNotExist(word,words);
-        //words_initial=insert_word_in_List(word,words_initial);
+        // words=insert_word_in_List(word,words);
     }
 
     // Fermer le fichier

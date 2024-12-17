@@ -131,15 +131,27 @@ int main() {
     
 
     printf("/************************ Q2.6 Écrire les algorithmes suivants pour PAT. ************************/\n\n");
+    int cmpt = nombre_node(pat);
+    printf("Il y a %d noeuds dans PAT. \n", cmpt);
+
+    int cpt  = 0;
     printf("Recher un mot dans PAT:\n");
     m = "des";
     bool isExist = recherchePAT(pat,m);
     printf("le mot '%s' est dans l'arbre ? = %d\n", m, isExist);
 
+    bool isExit_cpt = recherchePAT_cpt(pat, m, &cpt);
+    printf("le mot '%s' est dans l'arbre ? = %d et son cpt = %d\n", m, isExit_cpt, cpt);
+
     printf("\nLes mots présents dans le dictionnaire: \n");
     int nb_mot = ComptageMotsdansPAT(pat);
     printf("il y a %d mots présents dans le dictionnaire (avec les ponctuations).\n",nb_mot);
 
+    cpt = 0;
+    nb_mot = ComptageMotsdansPAT_cpt(pat, &cpt);
+    printf("il y a %d mots présents dans le dictionnaire (avec les ponctuations) et son compteur est %d.\n",nb_mot, cpt);
+
+    cpt = 0;
     printf("\nliste les mots du dictionnaire dans l’ordre alphabétique:\n");
     char** list_mot =  ListeMotsdansPAT(pat);
     printf("Mots dans le Patricia Trie :\n");
@@ -147,24 +159,47 @@ int main() {
         printf("%s\n", list_mot[i]);
     }
 
+    list_mot =  ListeMotsdansPAT_cpt(pat, &cpt);
+    printf("Mots dans le Patricia Trie :\n");
+    for (int i = 0; list_mot[i] != NULL; i++) {
+        printf("%s\t", list_mot[i]);
+    }
+    printf("\nson cpt est %d\n", cpt);
+
+    cpt = 0;
     printf("\nCompte les pointeurs vers Nil: \n");
     int totalNil = ComptageNildansPAT(pat);
     printf("Nombre total de pointeurs NULL : %d\n", totalNil);
 
+    totalNil = ComptageNildansPAT_cpt(pat, &cpt);
+    printf("Nombre total de pointeurs NULL : %d et son cpt = %d\n", totalNil, cpt);
+
+    cpt = 0;
     printf("\nCalcule la hauteur de l’arbre PAT:\n");
     int hauteur = HauteurPAT(pat);
     printf("Hauteur du Patricia Trie : %d\n", hauteur);
 
+    hauteur = HauteurPAT_cpt(pat, &cpt);
+    printf("Hauteur du Patricia Trie : %d et son cpt: %d\n", hauteur,cpt);
+
+    cpt = 0;
     printf("\nCalcule la profondeur moyenne des feuilles de l’arbre PAT:\n");
     int pronfondeur = ProfondeurMoyennePAT(pat);
     printf("Profondeur moyenne des feuilles du Patricia Trie : %d\n", pronfondeur);
 
-    
+    pronfondeur = ProfondeurMoyennePAT_cpt(pat,&cpt);
+    printf("Profondeur moyenne des feuilles du Patricia Trie : %d et son cpt : %d\n", pronfondeur, cpt);
+
+    cpt = 0;
     printf("\nCompter de mots du dictionnaire le mot A est préfixe.\n");
-    m = "que";
+    m = "dactylographie";
     int nb_prefixe = PrefixedansPAT(pat, m);
     printf("Il y a %d de mots du dictionnaire le mot '%s' est préfixe.\n", nb_prefixe, m);
 
+    nb_prefixe = PrefixedansPAT_cpt(pat, m, &cpt);
+    printf("Il y a %d de mots du dictionnaire le mot '%s' est préfixe et son cpt est %d.\n", nb_prefixe, m, cpt);
+
+    cpt = 0;
     printf("\nSupprimer un mot dans l'arbre PAT.\n");
     m = "ded";
     // printPAT(pp);
@@ -172,11 +207,12 @@ int main() {
     // printf("PAT apres supprime le mot '%s' :\n", m);
     // printPAT(pp);
 
-    // char* uy = malloc(sizeof(char)*4);
-    // strcpy(uy, "njs");
-    // // free(uy);
-    // printf("key is valide ? %d\n", isValidKey(uy));
+    printPAT(pp);
+    PATsuppression_cpt(&pp, m, &cpt);
+    printf("PAT apres supprime le mot '%s'  et son cpt est %d:\n", m, cpt);
+    printPAT(pp);
 
+    cpt = 0;
     printf("\nFusionner deux Patricia-tries en un seul.\n");
     printf("les deux Patricia-tries sont: \n");
     // Node* t = NodeCons("ABC ");
@@ -193,56 +229,60 @@ int main() {
     // printf("Le resultat obtenu est :\n");
     // printPAT(test);
 
-    printf("\nAfficher un noeud en format JSON\n") ;
-    //打印树的 JSON 形式
-    print_node_json(ptt->node[0]);
+    PAT* test = PATfusion_cpt(pp, ptt, &cpt);
+    printf("Le resultat obtenu et son cpt %d:\n", cpt);
+    printPAT(test);
 
-    // printf("\nAfficher un PAT en format JSON\n") ;
-    // print_pat_json(pat);
+    // printf("\nAfficher un noeud en format JSON\n") ;
+    // //打印树的 JSON 形式
+    // print_node_json(ptt->node[0]);
 
-    // printf("\nEcrire un PAT en format JSON dans un file\n") ;
-    ecrire_patricia("exemple.json",pat);
+    // // printf("\nAfficher un PAT en format JSON\n") ;
+    // // print_pat_json(pat);
 
-    printf("\nConstruit le noeud depuis le format JSON\n") ;
-    printNode(ptt->node[0],0);
-    cJSON* nj = node_to_json(ptt->node[0]);
-    Node* jsonn = json_to_node(nj);
-    printf("apres construire\n");
-    printNode(jsonn,0);
+    // // printf("\nEcrire un PAT en format JSON dans un file\n") ;
+    // ecrire_patricia("exemple.json",pat);
 
-    PAT* pj_ess = NULL;
-    PATinsertion(&pj_ess, "car");
-    PATinsertion(&pj_ess, "cat");
-    PATinsertion(&pj_ess, "cart");
-    PATinsertion(&pj_ess, "dog");
-    PATinsertion(&pj_ess, "bat");
-    PATinsertion(&pj_ess, "gat");
-    printf("\nConstruit le PAT depuis le format JSON\n") ;
-    printPAT(pj_ess);
-    cJSON* pj = pat_to_json(pj_ess);
+    // printf("\nConstruit le noeud depuis le format JSON\n") ;
+    // printNode(ptt->node[0],0);
+    // cJSON* nj = node_to_json(ptt->node[0]);
+    // Node* jsonn = json_to_node(nj);
+    // printf("apres construire\n");
+    // printNode(jsonn,0);
+
+    // PAT* pj_ess = NULL;
+    // PATinsertion(&pj_ess, "car");
+    // PATinsertion(&pj_ess, "cat");
+    // PATinsertion(&pj_ess, "cart");
+    // PATinsertion(&pj_ess, "dog");
+    // PATinsertion(&pj_ess, "bat");
+    // PATinsertion(&pj_ess, "gat");
+    // printf("\nConstruit le PAT depuis le format JSON\n") ;
+    // printPAT(pj_ess);
+    // cJSON* pj = pat_to_json(pj_ess);
+    // PAT* jsonp = json_to_pat(pj);
+    // printf("apres construire\n");
+    // printPAT(jsonp);
+    // printf("\n\n");
+
+    // printPAT(pat);
+    cJSON* pj = pat_to_json(pat);
     PAT* jsonp = json_to_pat(pj);
     printf("apres construire\n");
     printPAT(jsonp);
-    printf("\n\n");
 
-    printPAT(pat);
-    pj = pat_to_json(pat);
-    jsonp = json_to_pat(pj);
-    printf("apres construire\n");
-    printPAT(jsonp);
-
-    for (int i = 0; list_mot[i] != NULL; i++) {
-        PATsuppression(&jsonp, list_mot[i]);
-    }
-    // PATsuppression(&jsonp, "car");
-    // PATsuppression(&jsonp, "cat");
-    // PATsuppression(&jsonp, "cart");
-    // PATsuppression(&jsonp, "dog");
-    // PATsuppression(&jsonp, "bat");
-    // PATsuppression(&jsonp, "gat");
-    printf("apres suppression\n");        
-    printPAT(jsonp);
-    printf("le pat is null %d\n", jsonp==  NULL);
+    // for (int i = 0; list_mot[i] != NULL; i++) {
+    //     PATsuppression(&jsonp, list_mot[i]);
+    // }
+    // // PATsuppression(&jsonp, "car");
+    // // PATsuppression(&jsonp, "cat");
+    // // PATsuppression(&jsonp, "cart");
+    // // PATsuppression(&jsonp, "dog");
+    // // PATsuppression(&jsonp, "bat");
+    // // PATsuppression(&jsonp, "gat");
+    // printf("apres suppression\n");        
+    // printPAT(jsonp);
+    // printf("le pat is null %d\n", jsonp==  NULL);
 
     // print_pat_json(jsonp);
 
