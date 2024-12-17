@@ -659,7 +659,7 @@ PAT* PATfusion(PAT* A, PAT* B){ // O((n1​+n2​)⋅Lmax​)
                                 Fp = PATVide();
                                 for(int i = 0; aNode->fils!=NULL && aNode->fils->node[i]!=NULL; i++){
                                     // printf("aNode->fils->node[i]\n");
-                                    printNode(aNode->fils->node[i],0);
+                                    // printNode(aNode->fils->node[i],0);
                                     ajouter_racine(&Fp, aNode->fils->node[i]);
                                 }
                             }
@@ -683,7 +683,7 @@ PAT* PATfusion(PAT* A, PAT* B){ // O((n1​+n2​)⋅Lmax​)
                                 Gp = PATVide();
                                 for(int i = 0; bNode->fils!=NULL && bNode->fils->node[i]!=NULL; i++){
                                     // printf("bNode->fils->node[i]\n");
-                                    printNode(bNode->fils->node[i],0);
+                                    // printNode(bNode->fils->node[i],0);
                                     ajouter_racine(&Gp, bNode->fils->node[i]);
                                 }
                             }
