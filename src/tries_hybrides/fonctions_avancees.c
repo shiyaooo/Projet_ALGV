@@ -140,6 +140,16 @@ List* ListeMots(TrieH* arbre) {
     return ListeMotsRec(arbre, "");
 }
 
+/* libère la mémoire allouée pour toute une liste */ 
+void freeList(List* list) {
+    List* tmp;
+    while (list != NULL) {
+        tmp = list;
+        list = list->suiv;
+        free(tmp);
+    }
+}
+
 /* compte les pointeurs vers Nil */
 int ComptageNil(TrieH* arbre) {
     if (EstVide(arbre)==1) {
@@ -148,13 +158,22 @@ int ComptageNil(TrieH* arbre) {
     return ComptageNil(Inf(arbre)) + ComptageNil(Eq(arbre)) + ComptageNil(Sup(arbre));
 }
 
-/* calcule la hauteur de l'arbre */
-int Hauteur(TrieH* arbre) {
+int HauteurRec(TrieH* arbre) {
     if (EstVide(arbre)==1) {
         return -1;
     }
-    int cpt = MAX(Hauteur(Inf(arbre)), Hauteur(Eq(arbre)));
-    return 1 + MAX(cpt, Hauteur(Sup(arbre)));
+    int cpt = MAX(HauteurRec(Inf(arbre)), HauteurRec(Eq(arbre)));
+    return 1 + MAX(cpt, HauteurRec(Sup(arbre)));
+}
+
+/* calcule la hauteur de l'arbre */
+int Hauteur(TrieH* arbre) {
+    if (EstVide(arbre)==1) {
+        return 0;
+    }
+    //int cpt = MAX(Hauteur(Inf(arbre)), Hauteur(Eq(arbre)));
+    //return 1 + MAX(cpt, Hauteur(Sup(arbre)));
+    return HauteurRec(arbre);
 }
 
 List* ProfondeurMoyenneRec(TrieH* arbre, int profondeur) {
@@ -228,6 +247,7 @@ int ProfondeurMoyenne(TrieH* arbre) {
         tmp = tmp->suiv;
     }
     float moyenne = cpt/nb;
+    freeList(lprofondeur);
     return (int) round(moyenne);
 }
 
@@ -390,4 +410,146 @@ TrieH* Suppression(TrieH* arbre, char* mot) {
         //arbre->eq = Suppression(Eq(arbre), reste(mot));
     }
     return arbre;
+}
+
+/* met à jour la hauteur du noeud */
+void majHauteur(TrieH* A) { 
+    if (A != NULL) {
+        int h_inf, h_eq, h_sup = -1;
+        if (A->inf != NULL) {
+            h_inf = A->inf->hauteur;
+        }
+        if (A->eq != NULL) { 
+            h_eq = A->eq->hauteur;
+        }
+        if (A->sup != NULL) {
+            h_sup = A->sup->hauteur;
+        } 
+        A->hauteur = 1 + MAX(h_inf, MAX(h_eq, h_sup)); 
+    } 
+}
+
+/* renvoie le trie hybride après une rotation gauche */
+TrieH* rotationGauche(TrieH* A) { 
+    TrieH* nouv = A->eq; 
+    A->eq = nouv->inf; 
+    nouv->inf = A; 
+    majHauteur(A); 
+    majHauteur(nouv); 
+    return nouv; 
+} 
+
+/* renvoie le trie hybride après une rotation droite */
+TrieH* rotationDroite(TrieH* A) { 
+    TrieH* nouv = A->inf; 
+    A->inf = nouv->eq; 
+    nouv->eq = A; 
+    majHauteur(A); 
+    majHauteur(nouv); 
+    return nouv; 
+}
+
+TrieH* reequilibrer(TrieH* A) { 
+    if (A == NULL) { 
+        return A; 
+    } 
+    majHauteur(A); 
+    /*
+    int balance = (A->inf ? A->inf->hauteur : -1) - (A->sup ? A->sup->hauteur : -1); 
+    // Si déséquilibre à gauche 
+    if (balance > 1) { 
+        if ((A->inf && A->inf->inf ? A->inf->inf->hauteur : -1) >= (A->inf && A->inf->sup ? A->inf->sup->hauteur : -1)) { 
+            A = RotationDroite(A); 
+        } else { 
+            A->inf = RotationGauche(A->inf); 
+            A = RotationDroite(A); 
+        } 
+    } 
+    // Si déséquilibre à droite 
+    else if (balance < -1) { 
+        if ((A->sup && A->sup->sup ? A->sup->sup->hauteur : -1) >= (A->sup && A->sup->inf ? A->sup->inf->hauteur : -1)) { 
+            A = RotationGauche(A); 
+        } else { 
+            A->sup = RotationDroite(A->sup); 
+            A = RotationGauche(A); 
+        } 
+    } 
+    return A; 
+    */
+    int h_inf, h_sup = -1;
+    if (EstVide(Inf(A))==0) {
+        h_inf = A->inf->hauteur;
+    }
+    if (EstVide(Sup(A))==0) {
+        h_sup = A->sup->hauteur;
+    }
+
+    // Si déséquilibre à gauche 
+    if (h_inf - h_sup > 1) {
+        int h_inf_inf, h_inf_sup = -1;
+        TrieH* inf = Inf(A);
+        if (EstVide(inf)==0) {
+            if (EstVide(inf->inf)==0) {
+                h_inf_inf = inf->inf->hauteur;
+            }
+            if (EstVide(inf->sup)==0) {
+                h_inf_sup = inf->sup->hauteur;
+            }
+        }
+
+        if (h_inf_inf >= h_inf_sup) {
+            A = rotationDroite(A);
+        } else { 
+            A->inf = rotationGauche(inf);
+            A = rotationDroite(A);
+        }
+    }
+    // Si déséquilibre à droite
+    else if (h_sup - h_inf > 1) {
+        int h_sup_inf, h_sup_sup = -1;
+        TrieH* sup = Sup(A);
+        if (EstVide(sup)==0) {
+            if (EstVide(sup->inf)==0) {
+                h_sup_inf = sup->inf->hauteur;
+            }
+            if (EstVide(sup->sup)==0) {
+                h_sup_sup = sup->sup->hauteur;
+            }
+        }
+
+        if (h_sup_sup >= h_sup_inf) {
+            A = rotationGauche(A); 
+        } else { 
+            A->sup = rotationDroite(sup); 
+            A = rotationGauche(A); 
+        } 
+    } 
+    return A;
+}
+
+    /* A EFFACER*/
+    /*
+    if (Hauteur(Inf(A)) - Hauteur(Sup(A)) > 1) { 
+        if (Hauteur(Inf(Inf(A))) >= Hauteur(Eq(Inf(A)))) { 
+            A = RotationDroite(A); 
+        } else { 
+            A->inf = RotationGauche(A->inf); 
+            A = RotationDroite(A); 
+        } 
+    } else if (Hauteur(Sup(A)) - Hauteur(Inf(A)) > 1) { 
+        if (Hauteur(Sup(Sup(A))) >= Hauteur(Eq(Sup(A)))) { 
+            A = RotationGauche(A); 
+        } else { 
+            A->sup = RotationDroite(A->sup); 
+            A = RotationGauche(A); 
+        } 
+    } 
+    return A;
+}*/
+
+/* retourne le trie hybride équilibré */
+TrieH* TH_AjoutEquilibre(char* c, TrieH* A, int v) { 
+    A = TH_Ajout(c, A, v); 
+    majHauteur(A); 
+    return reequilibrer(A); 
 }

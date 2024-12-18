@@ -23,6 +23,9 @@ typedef struct List {
  */
 List* ListeMots(TrieH* arbre);
 
+/* libère la mémoire allouée pour toute une liste */ 
+void freeList(List* list);
+
 /* compte les pointeurs vers Nil */
 int ComptageNil(TrieH* arbre);
 
@@ -42,5 +45,8 @@ int Prefixe(TrieH* arbre, char* mot);
  * et qui le supprime de l'arbre s'il y figure
  */
 TrieH* Suppression(TrieH* arbre, char* mot);
+
+/* retourne le trie hybride équilibré */
+TrieH* TH_AjoutEquilibre(char* c, TrieH* A, int v);
 
 #endif // FONCTIONS_AVANCEES_H

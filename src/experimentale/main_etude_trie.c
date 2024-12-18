@@ -30,26 +30,34 @@ int main() {
     TrieH* th = NULL;
     Words* tmp = lwords;
     int cpt = 0;
+    clock_t start, end;
+    start = clock();
     while(tmp != NULL){
-        temps_cons_th += measureTime_ajout_un_seul_TH(TH_Ajout, tmp->data, th, cpt);
+        //th = TH_Ajout(tmp->data, th, cpt);
+        th = TH_AjoutEquilibre(tmp->data, th, cpt);
+        //temps_cons_th += measureTime_ajout_un_seul_TH(TH_Ajout, tmp->data, th, cpt);
         tmp = tmp->suiv;
         cpt++;
     }
+    end = clock();
+    temps_cons_th = ((double) (end - start)) / CLOCKS_PER_SEC;
     // print_List_Word(lwords);
     printf("temps de construction TrieH est : %.7f\n", temps_cons_th);
 
     /*---------------- Temps d'ajout d'un nouveau mot dans les structures ----------------*/
     // DANS TrieH
+    /*
     double temps_ajout_th = 0;
     char* m = "sfqdftxtyqsff<y";
     temps_ajout_th += measureTime_ajout_un_seul_TH(TH_Ajout, m, th, cpt);
     printf("temps d'ajout d'un nouveau mot dans TrieH: %.7f\n", temps_ajout_th);
-    
+    */
     /*---------------- Comparer les profondeur et hauteur des structures ----------------*/
-    int prof_TH = ProfondeurMoyenne(th);
+    int prof_TH = 0;
+    //int prof_TH = ProfondeurMoyenne(th);
     int haut_TH = Hauteur(th);
     printf("Hauteur de TrieH est %d, Profondeur de TrieH est %d\n", haut_TH, prof_TH);
-
+    
     /*---------------- Temps de la suppression d'un ensemble de mots des structures ----------------*/
     // DANS TrieH
     double temps_supp_th = 0;

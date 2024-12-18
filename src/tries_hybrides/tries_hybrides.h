@@ -7,6 +7,7 @@ typedef struct TrieH {
     struct TrieH *inf; // sous-arbre gauche
     struct TrieH *eq;  // sous-arbre central
     struct TrieH *sup; // sous-arbre droite
+    int hauteur; // Ajout d'un champ pour la hauteur
 } TrieH;
 
 /* construit une trie hybride */
