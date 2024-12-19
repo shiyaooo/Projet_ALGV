@@ -7,11 +7,14 @@
 
 #include <stdio.h>
 
+int cpt_fct = 0;
+
 /* recherche un mot dans un dictionnaire
  * renvoie 1 ssi le mot est présent dans le dictionnaire,
  *         O sinon 
  */
 int Recherche(TrieH* arbre, char* mot) {
+    cpt_fct++;
     if (EstVide(arbre)==1) {
         /*
         if (strlen(mot) == 1 && mot[0]==Rac(arbre) && Val(arbre)>=0) {
@@ -25,8 +28,11 @@ int Recherche(TrieH* arbre, char* mot) {
         char pm = prem(mot);
         char rac = Rac(arbre);
 
+        cpt_fct++;
         if (strlen(mot) == 1) {
+            cpt_fct++;
             if (rac == pm) {
+                cpt_fct++;
                 if (Val(arbre)!=-1) {
                     return 1;
                 }
@@ -35,10 +41,12 @@ int Recherche(TrieH* arbre, char* mot) {
             //return 0;
         }
         
+        cpt_fct++;
         if (pm < rac) {
             return Recherche(Inf(arbre), mot);
         }
         else if (pm > rac) {
+            cpt_fct++;
             return Recherche(Sup(arbre), mot);
         }
         return Recherche(Eq(arbre), reste(mot));
@@ -47,9 +55,11 @@ int Recherche(TrieH* arbre, char* mot) {
 
 /* compte les mots présents dans le dictionnaire */
 int ComptageMots(TrieH* arbre) {
+    cpt_fct++;
     if (EstVide(arbre)==1) {
         return 0;
     } else {
+        cpt_fct++;
         if (Val(arbre)!=-1) {
             return 1 + ComptageMots(Sup(arbre)) + ComptageMots(Eq(arbre)) + ComptageMots(Inf(arbre));
         }
@@ -58,6 +68,7 @@ int ComptageMots(TrieH* arbre) {
 }
 
 List* ListeMotsRec(TrieH* arbre, char* mot) {
+    cpt_fct++;
     if (EstVide(arbre)==1) {
         return NULL;
     }
@@ -67,6 +78,7 @@ List* ListeMotsRec(TrieH* arbre, char* mot) {
     lettre[1] = '\0';
 
     char* nouv;
+    cpt_fct++;
     if (strlen(mot)>0) {
         nouv = (char*)malloc(strlen(mot) + 2); // +2 pour le caractère supplémentaire et le '\0' 
         strcpy(nouv, mot);
@@ -85,15 +97,19 @@ List* ListeMotsRec(TrieH* arbre, char* mot) {
     List* list = NULL;
     List* tmp;
 
+    cpt_fct++;
     if (linf!=NULL) {   // s'il y a des mots inférieurs dans l'ordre alphabétique
         list = linf;
         tmp = linf;
         while (tmp->suiv!=NULL) {   // pour pointer sur le dernier élément de la liste
+            cpt_fct++;
             tmp = tmp->suiv;
         }
     }
     
+    cpt_fct++;
     if (Val(arbre)!=-1) { // s'il y a un mot
+        cpt_fct++;
         if (list!=NULL) {   // s'il y avait des mots inférieurs
             tmp->suiv = (List*)malloc(sizeof(List));
             tmp = tmp->suiv;
@@ -107,7 +123,9 @@ List* ListeMotsRec(TrieH* arbre, char* mot) {
         //tmp->suiv = NULL;
     }
 
+    cpt_fct++;
     if (leq!=NULL) {    // s'il y a un (des) mot(s) qui se termine(nt) plus loin
+        cpt_fct++;
         if (list==NULL) {   // s'il n'y avait pas de mot avant
             list = leq;
             tmp = list;
@@ -115,11 +133,14 @@ List* ListeMotsRec(TrieH* arbre, char* mot) {
             tmp->suiv = leq;
         }
         while (tmp->suiv!=NULL) {
+            cpt_fct++;
             tmp = tmp->suiv;
         }
     }
 
+    cpt_fct++;
     if (lsup!=NULL) {   // s'il y a des mots supérieurs
+        cpt_fct++;
         if (tmp!=NULL) {
             tmp->suiv = lsup;// on sait qu'il y a au moins un mot avant
         }/* else {
@@ -134,6 +155,7 @@ List* ListeMotsRec(TrieH* arbre, char* mot) {
  * renvoie une liste de mots
  */
 List* ListeMots(TrieH* arbre) {
+    cpt_fct++;
     if (EstVide(arbre)==1) {
         return NULL;
     }
@@ -152,6 +174,7 @@ void freeList(List* list) {
 
 /* compte les pointeurs vers Nil */
 int ComptageNil(TrieH* arbre) {
+    cpt_fct++;
     if (EstVide(arbre)==1) {
         return 1;
     }
@@ -168,6 +191,7 @@ int HauteurRec(TrieH* arbre) {
 
 /* calcule la hauteur de l'arbre */
 int Hauteur(TrieH* arbre) {
+    cpt_fct++;
     if (EstVide(arbre)==1) {
         return 0;
     }
@@ -178,11 +202,13 @@ int Hauteur(TrieH* arbre) {
 }
 
 List* ProfondeurMoyenneRec(TrieH* arbre, int profondeur) {
+    cpt_fct++;
     if (EstVide(arbre)==1) {
         return NULL;
     }
     //printf("%c\n", Rac(arbre));
     List* list = NULL;
+    cpt_fct+=3;
     if (EstVide(Inf(arbre)) && EstVide(Eq(arbre)) && EstVide(Sup(arbre))) {
         list = (List*)malloc(sizeof(List));
         list->entier = profondeur;
@@ -200,15 +226,19 @@ List* ProfondeurMoyenneRec(TrieH* arbre, int profondeur) {
     List* lsup = ProfondeurMoyenneRec(Sup(arbre), i);
 
     List* tmp;
+    cpt_fct++;
     if (linf!=NULL) {
         list = linf;
         tmp = linf;
         while (tmp->suiv!=NULL) {
+            cpt_fct++;
             tmp = tmp->suiv;
         }
     }
 
+    cpt_fct++;
     if (leq!=NULL) {
+        cpt_fct++;
         if (list==NULL) {
             list = leq;
             tmp = list;
@@ -216,11 +246,14 @@ List* ProfondeurMoyenneRec(TrieH* arbre, int profondeur) {
             tmp->suiv = leq;
         }
         while (tmp->suiv!=NULL) {
+            cpt_fct++;
             tmp = tmp->suiv;
         }
     }
 
+    cpt_fct++;
     if (lsup!=NULL) {
+        cpt_fct++;
         if (list==NULL) {
             list = lsup;
             tmp = list;
@@ -234,22 +267,27 @@ List* ProfondeurMoyenneRec(TrieH* arbre, int profondeur) {
 
 /* calcule la profondeur moyenne des feuilles de l'arbre */
 int ProfondeurMoyenne(TrieH* arbre) {
+    cpt_fct++;
     if (EstVide(arbre)==1) {
         return 0;
     }
     List* lprofondeur = ProfondeurMoyenneRec(arbre, 0);
     int cpt = 0;
     int nb = 0;
+
     List* tmp = lprofondeur;
+    cpt_fct++;
     if (tmp==NULL) {
         return 0;
     }
     while (tmp!=NULL) {
+        cpt_fct++;
         //printf("profondeur: %d\n", tmp->entier);
         cpt += tmp->entier;
         nb++;
         tmp = tmp->suiv;
     }
+    cpt_fct++;
     if (nb == 0) {
         freeList(lprofondeur);
         return 0;
@@ -265,31 +303,40 @@ int ProfondeurMoyenne(TrieH* arbre) {
  * le mot A est préfixe
  */
 int Prefixe(TrieH* arbre, char* mot) {
+    cpt_fct++;
     if (EstVide(arbre)==1) {
         return 0;
     }
     int prefixe = 0;
+    cpt_fct++;
     if (strcmp(mot, "")==0) {
+        cpt_fct++;
         if (Val(arbre)!=-1) {
             prefixe = 1;
         }
     } else {
         char pm = prem(mot);
         char rac = Rac(arbre);
+        cpt_fct++;
         if (strlen(mot) == 1) {
+            cpt_fct++;
             if (rac == pm) {
+                cpt_fct++;
                 if (Val(arbre)!=-1) {
                     prefixe = 1;
                 }
                 //return 0;
             }
         }
+        cpt_fct++;
         if (pm < rac) {
             return prefixe + Prefixe(Inf(arbre), mot);
         }
         else if (pm > rac) {
+            cpt_fct++;
             return prefixe + Prefixe(Sup(arbre), mot);
         }
+        cpt_fct++;
         return prefixe + Prefixe(Eq(arbre), reste(mot));
     }
     return prefixe + Prefixe(Inf(arbre), mot) + Prefixe(Sup(arbre), mot) + Prefixe(Eq(arbre), mot);
@@ -299,28 +346,35 @@ int Prefixe(TrieH* arbre, char* mot) {
  * et qui le supprime de l'arbre s'il y figure
  */
 TrieH* Suppression(TrieH* arbre, char* mot) {
+    cpt_fct++;
     if (EstVide(arbre)==1) {
         return arbre;
     }
     char pm = prem(mot);
     char rac = Rac(arbre);
     //printf("%s : %ld\n", mot, strlen(mot));
+    cpt_fct++;
     if (strlen(mot) == 1) {
         //printf("%c %d\n", rac, Val(arbre));
+        cpt_fct+=2;
         if (rac == pm && Val(arbre)!=-1) {
             arbre->v = -1;
+            cpt_fct++;
             if (EstVide(Eq(arbre))==0) {    // si le mot était un préfixe
                 return arbre;
             }
             //free(arbre->l);
             TrieH* nouv = NULL;
+            cpt_fct++;
             if (EstVide(Inf(arbre))==0) {
                 TrieH* inf = Inf(arbre);
                 nouv = inf;
                 arbre->inf = TH_Vide();
             }
             TrieH* sup = Sup(arbre);
+            cpt_fct++;
             if (EstVide(sup)==0) {
+                cpt_fct++;
                 if (EstVide(nouv)==1) {
                     arbre->sup = TH_Vide();
                     free(arbre);
@@ -329,7 +383,9 @@ TrieH* Suppression(TrieH* arbre, char* mot) {
                 //char c = Rac(sup);
                 TrieH* tmp = nouv;
                 while (tmp!=NULL) {
+                    cpt_fct++;
                     TrieH* tmpsup = Sup(tmp);
+                    cpt_fct++;
                     if (EstVide(tmpsup)==1) {
                         tmp->sup = sup;
                         break;
@@ -341,12 +397,16 @@ TrieH* Suppression(TrieH* arbre, char* mot) {
             return nouv;
         }
         else if (EstVide(Inf(arbre))==1 && EstVide(Sup(arbre))==1) {
+            cpt_fct+=2;
             return arbre;   // Sinon, le mot n'est pas présent
         }
+        cpt_fct+=2;
     }
     
+    cpt_fct++;
     if (pm < rac) {
         TrieH* inf = Inf(arbre);
+        cpt_fct++;
         if (EstVide(inf)==1) {  // Si vide, alors vide
             arbre->inf = inf;
         } else {                // Sinon, suppression
@@ -354,8 +414,10 @@ TrieH* Suppression(TrieH* arbre, char* mot) {
         }
         //arbre->inf = Suppression(Inf(arbre), mot);
     } else if (pm > rac) {
+        cpt_fct++;
         TrieH* sup = Sup(arbre);
         //printf("ICI");
+        cpt_fct++;
         if (EstVide(sup)==1) {  // Si vide,   //   //
             arbre->sup = sup;
         } else {                // Sinon,       //
@@ -363,37 +425,47 @@ TrieH* Suppression(TrieH* arbre, char* mot) {
         }
         //arbre->sup = Suppression(Sup(arbre), mot);
     } else {
+        cpt_fct++;
         //printf("%c ", rac);
         TrieH* eq = Eq(arbre);
+        cpt_fct++;
         if (EstVide(eq)==1) {   // Si vide,   //   //
             arbre->eq = eq;
         } else {                // Sinon,
             eq = Suppression(eq, reste(mot));  // suppression
+            cpt_fct++;
             if (EstVide(eq)==1) {       // Si vide (après suppression),
 
+                cpt_fct++;
                 if (Val(arbre)!=-1) {       // Si Rac(arbre) est la fin d'un mot
+                    cpt_fct++;
                     if (EstVide(Inf(arbre))==0) {
                         TrieH* inf = Inf(arbre);
                         arbre->eq = inf;
                         arbre->inf = TH_Vide();
                     } 
                     else if (EstVide(Sup(arbre))==0) {
+                        cpt_fct++;
                         TrieH* sup = Sup(arbre);
                         arbre->eq = sup;
                         arbre->sup = TH_Vide();
                     }
                     else {
+                        cpt_fct++;
                         arbre->eq = eq;
                     }
                     return arbre;
                 }
 
                 TrieH* nouv = NULL;
+                cpt_fct++;
                 if (EstVide(Inf(arbre))==0) {   // Si inf non vide
                     nouv = Inf(arbre);
                 }
                 TrieH* sup = Sup(arbre);
+                cpt_fct++;
                 if (EstVide(sup)==0) {          // Si sup non vide
+                    cpt_fct++;
                     if (nouv==NULL) {
                         free(arbre);
                         return sup;
@@ -401,7 +473,9 @@ TrieH* Suppression(TrieH* arbre, char* mot) {
                     //char c = Rac(sup);
                     TrieH* tmp = nouv;
                     while (tmp!=NULL) {
+                        cpt_fct++;
                         TrieH* tmpsup = Sup(tmp);
+                        cpt_fct++;
                         if (EstVide(tmpsup)==1) {
                             tmp->sup = sup;
                             break;
@@ -504,4 +578,22 @@ TrieH* TH_AjoutEquilibre(char* c, TrieH* A, int v) {
     A = TH_Ajout(c, A, v); 
     majHauteur(A); 
     return reequilibrer(A); 
+}
+
+/* retourne la valeur du compteur */
+int getCptFct() {
+    return cpt_fct;
+}
+
+/* modifie la valeur du compteur */
+void setCptFct(int v) {
+    cpt_fct = v;
+}
+
+/* renvoie le nombre de noeuds dans un trie hybride */
+int compteNoeuds(TrieH* arbre) {
+    if (EstVide(arbre)==1) {
+        return 0;
+    }
+    return 1 + compteNoeuds(Inf(arbre)) + compteNoeuds(Eq(arbre)) + compteNoeuds(Sup(arbre));
 }

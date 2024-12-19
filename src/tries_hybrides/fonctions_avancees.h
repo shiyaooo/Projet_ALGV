@@ -46,7 +46,18 @@ int Prefixe(TrieH* arbre, char* mot);
  */
 TrieH* Suppression(TrieH* arbre, char* mot);
 
+
 /* retourne le trie hybride équilibré */
 TrieH* TH_AjoutEquilibre(char* c, TrieH* A, int v);
+
+
+/* retourne la valeur du compteur */
+int getCptFct();
+
+/* modifie la valeur du compteur */
+void setCptFct(int v);
+
+/* renvoie le nombre de noeuds dans un trie hybride */
+int compteNoeuds(TrieH* arbre);
 
 #endif // FONCTIONS_AVANCEES_H

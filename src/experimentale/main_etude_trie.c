@@ -52,12 +52,49 @@ int main() {
     //temps_ajout_th += measureTime_ajout_un_seul_TH(TH_Ajout, m, th, cpt);
     printf("temps d'ajout d'un nouveau mot dans TrieH equilibré: %.7f\n", temps_ajout_th);
 
-    /*---------------- Comparer les profondeur et hauteur des structures ----------------*/
+    /*---------------- Comparer les profondeur et hauteur des structures equilibre----------------*/
     int prof_TH = 0;
     prof_TH = ProfondeurMoyenne(th);
     int haut_TH = th->hauteur;//Hauteur(th);
     printf("Hauteur de TrieH équilibré est %d, Profondeur de TrieH équilibré est %d\n", haut_TH, prof_TH);
     
+    /*---------------- Compteur des fonctions sur un trie équilibré ------------------------------*/
+    printf("\nIl y a %d noeuds dans TrieH équilibré\n", compteNoeuds(th));
+
+    setCptFct(0);
+    printf("Rechercher un mot dans TrieH :\n");
+    m = "dactylo";
+    int cpt_recherche = Recherche(th, m);
+    printf("le mot '%s' est dans l'arbre ? = %d et son cpt = %d\n", m, cpt_recherche, getCptFct());
+
+    setCptFct(0);
+    printf("\nLes mots présents dans le dictionnaire :\n");
+    int cpt_comptagemots = ComptageMots(th);
+    printf("il y a %d mots présents dans le dictionnaire (avec les ponctuations) et son compteur est %d.\n", cpt_comptagemots, getCptFct());
+
+
+
+    setCptFct(0);
+    printf("\nCompte les pointeurs vers Nil :\n");
+    int cpt_nil = ComptageNil(th);
+    printf("Nombre total de pointeurs NULL : %d et son cpt = %d\n", cpt_nil, getCptFct());
+
+    setCptFct(0);
+    printf("\nCalcule la hauteur de l'arbre TrieH équilibré :\n");
+    int hauteur = Hauteur(th);
+    printf("Hauteur du Trie Hybride équilibré : %d et son cpt: %d\n", hauteur, getCptFct());
+
+    setCptFct(0);
+    printf("\nCalcule la profondeur moyenne des feuilles du trie hybride équilibré :\n");
+    int prof_moy = ProfondeurMoyenne(th);
+    printf("Profondeur moyenne des feuilles du Trie Hybride : %d et son cpt : %d\n", prof_moy, getCptFct());
+
+    setCptFct(0);
+    printf("\nCompter les mots du dictionnaire préfixe d'un mot\n");
+    m = "dactylographie";
+    int cpt_prefixe = Prefixe(th, m);
+    printf("Il y a %d de mots du dictionnaire préfixe du mot '%s' et son cpt est : %d.\n", cpt_prefixe, m, getCptFct());
+
     /*---------------- Temps de la suppression d'un ensemble de mots des structures equilibre ----------------*/
     // DANS TrieH
     double temps_supp_th = 0;
@@ -106,6 +143,43 @@ int main() {
     haut_TH = th->hauteur;//Hauteur(th);
     printf("Hauteur de TrieH non équilibré est %d, Profondeur non équilibré de TrieH est %d\n", haut_TH, prof_TH);
 
+    /*---------------- Compteur des fonctions sur un trie non équilibré ------------------------------*/
+    printf("\nIl y a %d noeuds dans TrieH non équilibré\n", compteNoeuds(th));
+
+    setCptFct(0);
+    printf("Rechercher un mot dans TrieH non équilibré :\n");
+    m = "dactylo";
+    cpt_recherche = Recherche(th, m);
+    printf("le mot '%s' est dans l'arbre ? = %d et son cpt = %d\n", m, cpt_recherche, getCptFct());
+
+    setCptFct(0);
+    printf("\nLes mots présents dans le dictionnaire :\n");
+    cpt_comptagemots = ComptageMots(th);
+    printf("il y a %d mots présents dans le dictionnaire (avec les ponctuations) et son compteur est %d.\n", cpt_comptagemots, getCptFct());
+
+
+
+    setCptFct(0);
+    printf("\nCompte les pointeurs vers Nil :\n");
+    cpt_nil = ComptageNil(th);
+    printf("Nombre total de pointeurs NULL : %d et son cpt = %d\n", cpt_nil, getCptFct());
+
+    setCptFct(0);
+    printf("\nCalcule la hauteur de l'arbre TrieH non équilibré :\n");
+    hauteur = Hauteur(th);
+    printf("Hauteur du Trie Hybride non équilibré : %d et son cpt: %d\n", hauteur, getCptFct());
+
+    setCptFct(0);
+    printf("\nCalcule la profondeur moyenne des feuilles du trie hybride non équilibré :\n");
+    prof_moy = ProfondeurMoyenne(th);
+    printf("Profondeur moyenne des feuilles du Trie Hybride non équilibré: %d et son cpt : %d\n", prof_moy, getCptFct());
+
+    setCptFct(0);
+    printf("\nCompter les mots du dictionnaire préfixe d'un mot\n");
+    m = "dactylographie";
+    cpt_prefixe = Prefixe(th, m);
+    printf("Il y a %d de mots du dictionnaire préfixe du mot '%s' et son cpt est : %d.\n", cpt_prefixe, m, getCptFct());
+
     /*---------------- Temps de la suppression d'un ensemble de mots des structures non equilibre ----------------*/
     // DANS TrieH
     temps_supp_th = 0;
@@ -114,8 +188,7 @@ int main() {
         temps_supp_th += measureTime_supp_TH(Suppression, th, tmp->data);
         tmp = tmp->suiv;
     }
-    // printPAT(pat);
     printf("Temps de la suppression d'un ensemble de mots dans TrieH non équilibre: %.7f\n", temps_supp_th);
-
+    
     return 0;
 }
