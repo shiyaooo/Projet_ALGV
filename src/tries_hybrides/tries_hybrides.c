@@ -151,7 +151,7 @@ TrieH* Sup(TrieH* A) {
 */
 
 
-/* met à jour la hauteur du noeud (Q 3.8) */
+/* met à jour la hauteur du noeud (Partie 6 - pour éviter d'utiliser Hauteur) */
 void majHauteur(TrieH* A) { 
     if (A != NULL) {
         int h_inf = -1, h_eq = -1, h_sup = -1;

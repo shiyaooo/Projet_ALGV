@@ -46,13 +46,15 @@ int main() {
     
     double temps_ajout_th = 0;
     char* m = "sfqdftxtyqsff<y";
+    start = clock();
     th = TH_AjoutEquilibre(m, th, cpt);
+    end = clock();
     //temps_ajout_th += measureTime_ajout_un_seul_TH(TH_Ajout, m, th, cpt);
     printf("temps d'ajout d'un nouveau mot dans TrieH equilibré: %.7f\n", temps_ajout_th);
 
     /*---------------- Comparer les profondeur et hauteur des structures ----------------*/
     int prof_TH = 0;
-    //prof_TH = ProfondeurMoyenne(th);
+    prof_TH = ProfondeurMoyenne(th);
     int haut_TH = th->hauteur;//Hauteur(th);
     printf("Hauteur de TrieH équilibré est %d, Profondeur de TrieH équilibré est %d\n", haut_TH, prof_TH);
     
@@ -100,7 +102,7 @@ int main() {
     printf("temps d'ajout d'un nouveau mot dans TrieH non équilibré: %.7f\n", temps_ajout_th);
     
     /*---------------- Comparer les profondeur et hauteur des structures non equilibre ----------------*/
-    prof_TH = 0;//ProfondeurMoyenne(th);
+    prof_TH = ProfondeurMoyenne(th);
     haut_TH = th->hauteur;//Hauteur(th);
     printf("Hauteur de TrieH non équilibré est %d, Profondeur non équilibré de TrieH est %d\n", haut_TH, prof_TH);
 
