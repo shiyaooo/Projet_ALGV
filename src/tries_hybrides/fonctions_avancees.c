@@ -412,27 +412,10 @@ TrieH* Suppression(TrieH* arbre, char* mot) {
     return arbre;
 }
 
-/* met à jour la hauteur du noeud */
-void majHauteur(TrieH* A) { 
-    if (A != NULL) {
-        int h_inf, h_eq, h_sup = -1;
-        if (A->inf != NULL) {
-            h_inf = A->inf->hauteur;
-        }
-        if (A->eq != NULL) { 
-            h_eq = A->eq->hauteur;
-        }
-        if (A->sup != NULL) {
-            h_sup = A->sup->hauteur;
-        } 
-        A->hauteur = 1 + MAX(h_inf, MAX(h_eq, h_sup)); 
-    } 
-}
-
 /* renvoie le trie hybride après une rotation gauche */
 TrieH* rotationGauche(TrieH* A) { 
-    TrieH* nouv = A->eq; 
-    A->eq = nouv->inf; 
+    TrieH* nouv = A->sup; 
+    A->sup = nouv->inf; 
     nouv->inf = A; 
     majHauteur(A); 
     majHauteur(nouv); 
@@ -442,8 +425,8 @@ TrieH* rotationGauche(TrieH* A) {
 /* renvoie le trie hybride après une rotation droite */
 TrieH* rotationDroite(TrieH* A) { 
     TrieH* nouv = A->inf; 
-    A->inf = nouv->eq; 
-    nouv->eq = A; 
+    A->inf = nouv->sup; 
+    nouv->sup = A; 
     majHauteur(A); 
     majHauteur(nouv); 
     return nouv; 
@@ -476,7 +459,8 @@ TrieH* reequilibrer(TrieH* A) {
     } 
     return A; 
     */
-    int h_inf, h_sup = -1;
+    int h_inf = -1, h_sup = -1;
+
     if (EstVide(Inf(A))==0) {
         h_inf = A->inf->hauteur;
     }
@@ -486,7 +470,7 @@ TrieH* reequilibrer(TrieH* A) {
 
     // Si déséquilibre à gauche 
     if (h_inf - h_sup > 1) {
-        int h_inf_inf, h_inf_sup = -1;
+        int h_inf_inf = -1, h_inf_sup = -1;
         TrieH* inf = Inf(A);
         if (EstVide(inf)==0) {
             if (EstVide(inf->inf)==0) {
@@ -506,7 +490,7 @@ TrieH* reequilibrer(TrieH* A) {
     }
     // Si déséquilibre à droite
     else if (h_sup - h_inf > 1) {
-        int h_sup_inf, h_sup_sup = -1;
+        int h_sup_inf = -1, h_sup_sup = -1;
         TrieH* sup = Sup(A);
         if (EstVide(sup)==0) {
             if (EstVide(sup->inf)==0) {
@@ -523,7 +507,7 @@ TrieH* reequilibrer(TrieH* A) {
             A->sup = rotationDroite(sup); 
             A = rotationGauche(A); 
         } 
-    } 
+    }
     return A;
 }
 

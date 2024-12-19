@@ -43,6 +43,10 @@ char prem(char* c);
     privée de la première lettre */
 char* reste(char* c);
 
+
+/* met à jour la hauteur du noeud (Q 3.8) */
+void majHauteur(TrieH* A);
+
 /* renvoie le trie hybride resultant de l'insertion de c dans A */
 TrieH* TH_Ajout(char* c, TrieH* A, int v);
 

@@ -10,9 +10,6 @@
 #include <unistd.h>
 #include <time.h>
 
-//  gcc -Wall -o main main.c experimentale.c
-
-//int main(int argc, char *argv[]) {
 int main() {
     Words* lwords=read_Files_Shakespeare("Shakespeare");
     printf("\n");
@@ -24,7 +21,7 @@ int main() {
 
 
 
-    /*---------------- Temps de construction de la structure complète ----------------*/
+    /*---------------- Temps de construction de la structure complète equilibre ----------------*/
     // DANS TrieH
     double temps_cons_th = 0;
     TrieH* th = NULL;
@@ -42,23 +39,24 @@ int main() {
     end = clock();
     temps_cons_th = ((double) (end - start)) / CLOCKS_PER_SEC;
     // print_List_Word(lwords);
-    printf("temps de construction TrieH est : %.7f\n", temps_cons_th);
+    printf("temps de construction TrieH équilibré est : %.7f\n", temps_cons_th);
 
-    /*---------------- Temps d'ajout d'un nouveau mot dans les structures ----------------*/
+    /*---------------- Temps d'ajout d'un nouveau mot dans les structures equilibre ----------------*/
     // DANS TrieH
-    /*
+    
     double temps_ajout_th = 0;
     char* m = "sfqdftxtyqsff<y";
-    temps_ajout_th += measureTime_ajout_un_seul_TH(TH_Ajout, m, th, cpt);
-    printf("temps d'ajout d'un nouveau mot dans TrieH: %.7f\n", temps_ajout_th);
-    */
+    th = TH_AjoutEquilibre(m, th, cpt);
+    //temps_ajout_th += measureTime_ajout_un_seul_TH(TH_Ajout, m, th, cpt);
+    printf("temps d'ajout d'un nouveau mot dans TrieH equilibré: %.7f\n", temps_ajout_th);
+
     /*---------------- Comparer les profondeur et hauteur des structures ----------------*/
     int prof_TH = 0;
-    //int prof_TH = ProfondeurMoyenne(th);
-    int haut_TH = Hauteur(th);
-    printf("Hauteur de TrieH est %d, Profondeur de TrieH est %d\n", haut_TH, prof_TH);
+    //prof_TH = ProfondeurMoyenne(th);
+    int haut_TH = th->hauteur;//Hauteur(th);
+    printf("Hauteur de TrieH équilibré est %d, Profondeur de TrieH équilibré est %d\n", haut_TH, prof_TH);
     
-    /*---------------- Temps de la suppression d'un ensemble de mots des structures ----------------*/
+    /*---------------- Temps de la suppression d'un ensemble de mots des structures equilibre ----------------*/
     // DANS TrieH
     double temps_supp_th = 0;
     tmp = lwords;
@@ -67,7 +65,55 @@ int main() {
         tmp = tmp->suiv;
     }
     // printPAT(pat);
-    printf("Temps de la suppression d'un ensemble de mots dans TrieH: %.7f\n", temps_supp_th);
+    printf("Temps de la suppression d'un ensemble de mots dans TrieH équilibre: %.7f\n", temps_supp_th);
+
+    /*---------------- Temps de construction de la structure complète non equilibre ----------------*/
+    lwords=read_Files_Shakespeare("Shakespeare");
+    printf("\n");
+    eciture_words(lwords);
+    printf("Successful!\n");
+    
+    tmp = lwords;
+    start = clock();
+    while(tmp != NULL){
+        //th = TH_Ajout(tmp->data, th, cpt);
+        th = TH_AjoutEquilibre(tmp->data, th, cpt);
+        //temps_cons_th += measureTime_ajout_un_seul_TH(TH_Ajout, tmp->data, th, cpt);
+        tmp = tmp->suiv;
+        cpt++;
+    }
+    end = clock();
+    temps_cons_th = ((double) (end - start)) / CLOCKS_PER_SEC;
+    // print_List_Word(lwords);
+    printf("temps de construction TrieH non équilibré est : %.7f\n", temps_cons_th);
+
+    /*---------------- Temps d'ajout d'un nouveau mot dans les structures non equilibre ----------------*/
+    // DANS TrieH
+    
+    temps_ajout_th = 0;
+    m = "sfqdftxtyqsff<y";
+    start = clock();
+    th = TH_AjoutEquilibre(m, th, cpt);
+    end = clock();
+    //temps_ajout_th += measureTime_ajout_un_seul_TH(TH_Ajout, m, th, cpt);
+    temps_ajout_th = ((double) (end - start)) / CLOCKS_PER_SEC;
+    printf("temps d'ajout d'un nouveau mot dans TrieH non équilibré: %.7f\n", temps_ajout_th);
+    
+    /*---------------- Comparer les profondeur et hauteur des structures non equilibre ----------------*/
+    prof_TH = 0;//ProfondeurMoyenne(th);
+    haut_TH = th->hauteur;//Hauteur(th);
+    printf("Hauteur de TrieH non équilibré est %d, Profondeur non équilibré de TrieH est %d\n", haut_TH, prof_TH);
+
+    /*---------------- Temps de la suppression d'un ensemble de mots des structures non equilibre ----------------*/
+    // DANS TrieH
+    temps_supp_th = 0;
+    tmp = lwords;
+    while(tmp != NULL){
+        temps_supp_th += measureTime_supp_TH(Suppression, th, tmp->data);
+        tmp = tmp->suiv;
+    }
+    // printPAT(pat);
+    printf("Temps de la suppression d'un ensemble de mots dans TrieH non équilibre: %.7f\n", temps_supp_th);
 
     return 0;
 }

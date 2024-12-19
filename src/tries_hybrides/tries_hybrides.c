@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include <stdio.h>
+#include <sys/param.h>
 
 /* renvoie la première lettre de la chaine de caractères */
 char prem(char* c) {
@@ -150,6 +151,23 @@ TrieH* Sup(TrieH* A) {
 */
 
 
+/* met à jour la hauteur du noeud (Q 3.8) */
+void majHauteur(TrieH* A) { 
+    if (A != NULL) {
+        int h_inf = -1, h_eq = -1, h_sup = -1;
+        if (EstVide(Inf(A))==0) {
+            h_inf = A->inf->hauteur;
+        }
+        if (EstVide(Eq(A))==0) { 
+            h_eq = A->eq->hauteur;
+        }
+        if (EstVide(Sup(A))==0) {
+            h_sup = A->sup->hauteur;
+        } 
+        A->hauteur = 1 + MAX(h_inf, MAX(h_eq, h_sup)); 
+    } 
+}
+
 /* renvoie le trie hybride resultant de l'insertion de c dans A */
 TrieH* TH_Ajout(char* c, TrieH* A, int v) {
     if (EstVide(A)==1) {
@@ -160,6 +178,7 @@ TrieH* TH_Ajout(char* c, TrieH* A, int v) {
             char* r = reste(c); 
             TrieH* newTrie = TrieHybride(prem(c), TH_Vide(), TH_Ajout(r, TH_Vide(), v), TH_Vide(), -1); 
             free_chaine(r); // Libération de la mémoire allouée pour r
+            majHauteur(newTrie);    // Mise à jour de la hauteur
             return newTrie;
         }
     } else {
@@ -174,22 +193,32 @@ TrieH* TH_Ajout(char* c, TrieH* A, int v) {
                     return A;
                 }
                 else {          // sinon, c'est la racine d'un mot déjà inséré
-                    return TrieHybride(rac, Sup(A), Eq(A), Inf(A), v);
+                    //return TrieHybride(rac, Sup(A), Eq(A), Inf(A), v);
+                    A->v = v;
+                    majHauteur(A);    // Mise à jour de la hauteur
+                    return A;
                 }
             }
         }
         
         if (pm < rac) {
-            return TrieHybride(rac, TH_Ajout(c, Inf(A), v), Eq(A), Sup(A), Val(A));
+            //return TrieHybride(rac, TH_Ajout(c, Inf(A), v), Eq(A), Sup(A), Val(A));
+            A->inf = TH_Ajout(c, Inf(A), v);
         }
         else if (pm > rac) {
-            return TrieHybride(rac, Inf(A), Eq(A), TH_Ajout(c, Sup(A), v), Val(A));
+            //return TrieHybride(rac, Inf(A), Eq(A), TH_Ajout(c, Sup(A), v), Val(A));
+            A->sup = TH_Ajout(c, Sup(A), v);
         }
         //return TrieHybride(rac, Inf(A), TH_Ajout(reste(c), Eq(A), v), Sup(A), Val(A));
-        char* r = reste(c); 
-        TrieH* newTrie = TrieHybride(rac, A->inf, TH_Ajout(r, A->eq, v), A->sup, A->v); 
-        free_chaine(r); // Libération de la mémoire allouée pour r
-        return newTrie;
+        else {
+            char* r = reste(c); 
+            //TrieH* newTrie = TrieHybride(rac, A->inf, TH_Ajout(r, A->eq, v), A->sup, A->v); 
+            A->eq = TH_Ajout(r, Eq(A), v);
+            free_chaine(r); // Libération de la mémoire allouée pour r
+            //return newTrie
+        }
+        majHauteur(A);  // Mise à jour de la hauteur
+        return A;
     }
 }
 
